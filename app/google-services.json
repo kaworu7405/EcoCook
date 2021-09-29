@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "604038525227",
+    "project_id": "ecocook-3860d",
+    "storage_bucket": "ecocook-3860d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:604038525227:android:bc698062a96312aff6556e",
+        "android_client_info": {
+          "package_name": "com.example.ecocook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "604038525227-eso1uge2b2g4rtjgcj7cbfab2eudr50j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlYRALiDX1FztdIiUzM8TjScZLrwShKMs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "604038525227-eso1uge2b2g4rtjgcj7cbfab2eudr50j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
