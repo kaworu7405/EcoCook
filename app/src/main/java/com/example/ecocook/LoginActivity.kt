@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
-    var TAG="SignUp"
+    var backKeyPressedTime:Long=0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -23,16 +23,13 @@ class LoginActivity : AppCompatActivity() {
             login()
         }
         SignUpButton.setOnClickListener{
-            //Login Activity로 이동
-            val nextIntent = Intent(this, SignUpActivity::class.java)
-            startActivity(nextIntent)
+            startActivity(Intent(this, SignUpActivity::class.java))
         }
     }
 
     public override fun onStart() {
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
-        val currentUser = auth.currentUser
     }
 
     public fun login() {
@@ -46,11 +43,8 @@ class LoginActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         if (FirebaseAuth.getInstance().currentUser!!.isEmailVerified)
                         {
-                            val user = auth.currentUser
-                            Toast.makeText(baseContext, "로그인에 성공하였습니다. 환영합니다.",
-                                Toast.LENGTH_SHORT).show()
-                            val nextIntent = Intent(this, MainMenuActivity::class.java)
-                            startActivity(nextIntent)
+                            startActivity(Intent(this, MainMenuActivity::class.java))
+                            finish()
                         }
                         else {
                             Toast.makeText(baseContext, "이메일 인증이 완료되지 않았습니다.",
@@ -70,5 +64,11 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        if(System.currentTimeMillis()-backKeyPressedTime<2000){
+            finishAffinity()
+        }
+        backKeyPressedTime=System.currentTimeMillis()
+    }
 
 }

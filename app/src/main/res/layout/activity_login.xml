@@ -51,6 +51,7 @@
                 android:id="@+id/LoginButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:background="#4CAF50"
                 android:backgroundTint="#4CAF50"
                 android:text="로그인"

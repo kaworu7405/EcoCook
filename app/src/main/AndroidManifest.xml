@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EcoCook">
         <activity
-            android:name=".LoginActivity"
+            android:name=".MainMenuActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +22,11 @@
         </activity>
         <activity android:name=".SignUpActivity">
         </activity>>
-        <activity android:name=".MainMenuActivity">
+        <activity android:name=".LoginActivity">
+        </activity>>
+        <activity android:name=".MemberInitActivity">
+        </activity>>
+        <activity android:name=".passwordResetActivity">
         </activity>>
     </application>
 
