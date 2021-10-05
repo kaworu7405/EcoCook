@@ -19,15 +19,18 @@ class SignUpActivity : AppCompatActivity() {
         auth = Firebase.auth
 
 
-        LoginButton.setOnClickListener{
+        signUpButton.setOnClickListener{
             signUp()
+        }
+        ReturnButton.setOnClickListener{
+            finish()
         }
     }
 
     public override fun onStart() {
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
-        val currentUser = auth.currentUser
+        //val currentUser = auth.currentUser
     }
 
     public fun signUp() {
@@ -47,8 +50,7 @@ class SignUpActivity : AppCompatActivity() {
                                     if(sendTask.isSuccessful){              //성공했을 경우 메일에서 인증하면됨
                                         Toast.makeText(baseContext, "입력하신 이메일로 인증 메일이 전송되었습니다.",
                                             Toast.LENGTH_SHORT).show()
-                                        val nextIntent = Intent(this, LoginActivity::class.java)
-                                        startActivity(nextIntent)
+                                        finish()
                                     } else{
                                         Toast.makeText(baseContext, "이메일 보내기에 실패하였습니다.",
                                             Toast.LENGTH_SHORT).show()
