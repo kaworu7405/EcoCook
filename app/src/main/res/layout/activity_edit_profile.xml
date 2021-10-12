@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:text="회원 정보 수정"
+            android:textSize="30dp" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="193dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/UserImageView"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_baseline_account_circle_24" />
+        </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/ChangeUserPhotoButton"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="사진 변경" />
+
+        <EditText
+            android:id="@+id/EditUserName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/EditUserPhoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="phone" />
+
+        <EditText
+            android:id="@+id/EditUserBirthDay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="time" />
+
+        <EditText
+            android:id="@+id/EditUserAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPostalAddress" />
+
+        <Button
+            android:id="@+id/RequestEditProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="정보 변경하기" />
+
+        <Button
+            android:id="@+id/DontRequestEditProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="나가기" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
