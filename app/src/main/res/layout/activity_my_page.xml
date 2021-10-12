@@ -60,7 +60,7 @@
                 android:id="@+id/UserNameText"
                 android:layout_width="106dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="70dp"
+                android:layout_marginStart="60dp"
                 android:gravity="center|center_horizontal"
                 android:text="UserName"
                 android:textSize="20dp" />
