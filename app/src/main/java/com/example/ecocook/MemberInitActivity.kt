@@ -36,7 +36,11 @@ class MemberInitActivity : AppCompatActivity() {
         var address=AddressEditText.text.toString()
 
 
-        if(name.isNotEmpty() && phoneNumber.length>9 && birthday.length>5 && address.isNotEmpty()) //이메일과 패스워드를 모두 입력
+        if(name.isEmpty()||name.length>8){
+            Toast.makeText(baseContext, "이름을 1~8자 사이로 입력해주세요.",
+                Toast.LENGTH_SHORT).show()
+        }
+        else if(name.isNotEmpty() && phoneNumber.length>9 && birthday.length>5 && address.isNotEmpty()) //이메일과 패스워드를 모두 입력
         {
             val user = Firebase.auth.currentUser
             val db = Firebase.firestore
@@ -55,7 +59,7 @@ class MemberInitActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT).show()}
             }
         }
-        else{ //이메일, 패스워드를 입력하지 않았음
+        else{ //입력하지 않았음
             Toast.makeText(baseContext, "올바른 값을 입력해주세요.",
                 Toast.LENGTH_SHORT).show()
         }
