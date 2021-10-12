@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EcoCook">
         <activity
+            android:name=".manage_fridge.MyFridge"
+            android:exported="true" />
+        <activity
             android:name=".MainMenuActivity"
             android:exported="true">
             <intent-filter>
@@ -27,7 +30,6 @@
         <activity android:name=".passwordResetActivity"></activity>
         <activity android:name=".MyPageActivity"></activity>>
         <activity android:name=".ChangeProfileActivity"></activity>>
-
     </application>
 
 </manifest>
