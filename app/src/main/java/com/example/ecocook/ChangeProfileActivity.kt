@@ -28,7 +28,7 @@ import kotlinx.android.synthetic.main.activity_edit_profile.view.*
 import kotlinx.android.synthetic.main.activity_my_page.*
 
 class ChangeProfileActivity: AppCompatActivity() {
-
+//github test
     var user=Firebase.auth.currentUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
