@@ -7,6 +7,17 @@
         <entry key="..\:/Users/jina0/AndroidStudioProjects/EcoCook/app/src/main/res/drawable/ic_baseline_account_circle_24.xml" value="0.196875" />
         <entry key="..\:/Users/jina0/AndroidStudioProjects/EcoCook/app/src/main/res/layout/activity_camera.xml" value="0.1125" />
         <entry key="..\:/Users/jina0/AndroidStudioProjects/EcoCook/app/src/main/res/layout/activity_edit_profile.xml" value="0.27692307692307694" />
+        <entry key="..\:/EcoCook/app/src/main/res/drawable/edit_round.xml" value="0.21875" />
+        <entry key="..\:/EcoCook/app/src/main/res/drawable/ic_launcher_background.xml" value="0.21875" />
+        <entry key="..\:/EcoCook/app/src/main/res/layout/activity_login.xml" value="0.1828125" />
+        <entry key="..\:/EcoCook/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/EcoCook/app/src/main/res/layout/activity_mainmenu.xml" value="0.1828125" />
+        <entry key="..\:/EcoCook/app/src/main/res/layout/activity_member_init.xml" value="0.1828125" />
+        <entry key="..\:/EcoCook/app/src/main/res/layout/activity_my_fridge.xml" value="0.33" />
+        <entry key="..\:/EcoCook/app/src/main/res/layout/activity_password_reset.xml" value="0.1828125" />
+        <entry key="..\:/EcoCook/app/src/main/res/layout/activity_sign_up.xml" value="0.1828125" />
+        <entry key="..\:/EcoCook/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.19895833333333332" />
+        <entry key="..\:/EcoCook/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.19895833333333332" />
         <entry key="..\:/Users/jina0/AndroidStudioProjects/EcoCook/app/src/main/res/layout/activity_login.xml" value="0.33" />
         <entry key="..\:/Users/jina0/AndroidStudioProjects/EcoCook/app/src/main/res/layout/activity_main.xml" value="0.2848731884057971" />
         <entry key="..\:/Users/jina0/AndroidStudioProjects/EcoCook/app/src/main/res/layout/activity_mainmenu.xml" value="0.33" />
@@ -18,7 +29,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

@@ -4,7 +4,9 @@ plugins {
     id 'kotlin-android-extensions'
     id 'com.google.gms.google-services'
 }
-
+task wrapper(type: Wrapper) {
+    gradleVersion = '0.9'
+}
 android {
     compileSdk 31
 
