@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.EcoCook" parent="Theme.AppCompat.Light">
+    <style name="Theme.EcoCook" parent="Theme.AppCompat.Light.NoActionBar"> <!--.NoActionBar추가로 액션바 없앰 -->
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
