@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EcoCook">
         <activity
+            android:name=".manage_fridge.AddIngredient"
+            android:exported="true" />
+        <activity
             android:name=".manage_fridge.MyFridge"
             android:exported="true" />
         <activity
@@ -24,12 +27,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignUpActivity"></activity>
-        <activity android:name=".LoginActivity"></activity>
-        <activity android:name=".MemberInitActivity"></activity>
-        <activity android:name=".passwordResetActivity"></activity>
-        <activity android:name=".MyPageActivity"></activity>>
-        <activity android:name=".ChangeProfileActivity"></activity>>
+        <activity android:name=".SignUpActivity" />
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".MemberInitActivity" />
+        <activity android:name=".passwordResetActivity" />
+        <activity android:name=".MyPageActivity" />
+        <activity android:name=".ChangeProfileActivity" />
     </application>
 
 </manifest>
