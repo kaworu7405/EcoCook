@@ -9,3 +9,19 @@ class UserFridge {
     var expiryDate : Int = 20211029 //유통기한
     var num : Int = 5 //개수
 }
+
+/*
+//사진 넣으실 때 ImageView 쓰시면 아래 코드 쓰시면 됩니다!
+//근데 아직 icon의 이미지가 없어서 storage에 안올라와있어요..
+//icon 이미지 구해서 storage에 저장해놓으면 말씀드리도록 하겠습니다!!
+    fun getFireBaseProfileImage(){ //profile 사진을 ImageView에 설정해주는 함수
+        var fileName=obj.category+".jpg" //채소 아이콘 이미지를 가져오려면 "채소.jpg"가 되도록
+
+        val storageRef=Firebase.storage.reference.child("icon_img/"+fileName)
+        storageRef.downloadUrl.addOnSuccessListener { uri->
+            Glide.with(this).load(uri).into(레이아웃에서 ImageView의 id 넣으세요!!)
+        }.addOnFailureListener {
+            // Handle any errors
+        }
+    }
+ */
