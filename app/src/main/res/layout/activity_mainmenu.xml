@@ -69,7 +69,13 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="50dp"
                 android:backgroundTint="#03A9F4"
-                android:text="db text" />
+                android:text="레시피 DB TEST" />
+
+            <Button
+                android:id="@+id/DbTestButton2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="냉장고 DB TEST" />
         </LinearLayout>
 
     </LinearLayout>

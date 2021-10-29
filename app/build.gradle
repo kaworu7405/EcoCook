@@ -1,8 +1,10 @@
 plugins {
     id 'com.android.application'
+    id 'kotlin-kapt'
     id 'kotlin-android'
     id 'kotlin-android-extensions'
     id 'com.google.gms.google-services'
+    id 'realm-android'
 }
 task wrapper(type: Wrapper) {
     gradleVersion = '0.9'
@@ -45,7 +47,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.android.gms:play-services-auth:19.2.0'
     implementation 'com.google.firebase:firebase-firestore-ktx'
-    implementation platform('com.google.firebase:firebase-bom:28.4.1')
+    implementation platform('com.google.firebase:firebase-bom:28.4.2')
     implementation 'com.google.firebase:firebase-storage-ktx'
     implementation 'de.hdodenhof:circleimageview:3.1.0' //Circle view
     implementation 'com.github.bumptech.glide:glide:4.11.0'
