@@ -102,45 +102,24 @@ class MainMenuActivity : AppCompatActivity(), View.OnClickListener {
         //냉장고 DB TEST할 수 있는 버튼!
         DbTestButton2.setOnClickListener {
             val db = Firebase.firestore
-            val f = user?.let { it1 -> db.collection(it1.uid) }
-            /*
-            //UserFridge.kt의 class를 object화 하여 db에 저장해줍니다.
-            ////////////////////////////////////////////////////////////////////
-            //유저의 냉장고에 새로운 음식을 추가하는 코드입니다.
-            val data= hashMapOf(
-                "category" to "과일",
-                "name" to "메론",
-                //iconId 설명 : 제가 이후에 음식 종류에 따른 이미지 url가르쳐드릴테니 야채인지 과일인지에 따라 그 url을 여기에 넣어주시면 됩니다!
-                "iconId" to "null",
-                "buyDate" to 20211029,
-                "expiryDate" to 20211105,
-                "num" to 7
-            )
-            //document의 인자로는 음식명을 해주시면 될 것 같습니다!
-            //음식명은 중복되어서는 안됩니다! DB에서보면 컬럼이랑 같다고 보셔도 될것같습니다!
-            //사용자의 냉장고에 저장되어있는 음식들 이름을 본 뒤 같은 이름이 저장되어있으면 경고문을 띄우고 "이미 존재하는 음식이다" 이런식으로 알리면 좋을 것 같습니다!
-            f?.document("메론")?.set(data)
-            /////////////////////////////////////////////////////////////////////
-             */
-
-
+            val f = db.collection(user?.uid.toString())
             /////////////////////////////////////////////////////////////////////
             // 유저의 냉장고에 있는 음식을 수정하는 코드입니다.
             // 메론의 개수를 5개로 변경하고 expiryDate를 20211108로 변경 싶을 때 사용할 수 있습니다.
             /*
             if (f != null) {
-                f.document("메론").update("num", 5)
-                f.document("메론").update("expiryDate", 20211108)
+                f.document("음식id").update("num", 5)
+                f.document("음식id").update("expiryDate", 20211108)
             }
             */
             ////////////////////////////////////////////////////////////////////
 
 
-            /*
+/*
             ////////////////////////////////////////////////////////////////////
             //유저의 냉장고에 있는 음식을 삭제하는 코드입니다
             if (f != null) {
-                f.document("메론").delete().addOnSuccessListener{
+                f.document("음식id").delete().addOnSuccessListener{
                     //삭제가 잘 된 경우 코드
                     Log.d("TAG", "DocumentSnapshot successfully deleted!")
                 }.addOnFailureListener{
@@ -149,30 +128,53 @@ class MainMenuActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
             /////////////////////////////////////////////////////////////////
-             */
+ */
+
 
             /////////////////////////////////////////////////////////////////////
             //유저의 냉장고에 있는 음식을 가져오는 코드입니다.
-            if (f != null) //만약에 null이면 아직 사용자가 저장한 음식이 하나도 없다는 의미입니다!
-            {
-                f.addSnapshotListener { querySnapshot: QuerySnapshot?, e: FirebaseFirestoreException? ->
-                    if (querySnapshot != null) {
-                        // 반복문으로 모든 음식에 접근합니다.(document가 음식)
-                        // UserFridge.kt에 각 필드 설명 적혀있습니다!
-                        for (document in querySnapshot.documents) {
-                            val obj = document.toObject<UserFridge>()
-                            if (obj != null) {
-                                Log.d("TAG", "이 음식은 "+obj.category.toString())
-                                Log.d("TAG", obj.name.toString()+"입니다")
-                                Log.d("TAG", obj.expiryDate.toString()+"까지 먹어야돼요!!")
-                            }
+
+            f.addSnapshotListener { querySnapshot: QuerySnapshot?, _: FirebaseFirestoreException? ->
+                if (querySnapshot != null) {
+                    // 반복문으로 모든 음식에 접근합니다.(document가 음식)
+                    // UserFridge.kt에 각 필드 설명 적혀있습니다!
+                    for (document in querySnapshot.documents) {
+                        val obj = document.toObject<UserFridge>()
+                        if (obj != null) {
+                            Log.d("TAG", "이 음식은 " + obj.category.toString())
+                            Log.d("TAG", obj.name.toString() + "입니다")
+                            Log.d("TAG", obj.expiryDate.toString() + "까지 먹어야돼요!!")
                         }
                     }
                 }
             }
-            else {//null이므로 아직 사용자가 저장한 음식이 하나도 없다는 의미입니다!
-                Log.d("TAG", "아직 유저가 저장한 음식 없음~!!")
-            }
+
+/*
+            //UserFridge.kt의 class를 object화 하여 db에 저장해줍니다.
+            ////////////////////////////////////////////////////////////////////
+            //유저의 냉장고에 새로운 음식을 추가하는 코드입니다.
+            f.get()
+                .addOnSuccessListener { result ->
+                    var foodNum=result.size()+1 //현재 냉장고에 저장되어있는 음식의 수에다가 1 더해준 값
+                    val data = hashMapOf(
+                        "category" to "과일",
+                        "name" to "메론",
+                        //iconId 설명 : 제가 이후에 음식 종류에 따른 이미지 url가르쳐드릴테니 야채인지 과일인지에 따라 그 url을 여기에 넣어주시면 됩니다!
+                        "iconId" to "null",
+                        "buyDate" to 20211029,
+                        "expiryDate" to 20211105,
+                        "num" to 7,
+                        "id" to foodNum
+                    )
+                    f.document(foodNum.toString()).set(data) // 현재 냉장고에 저장되어있는 음식의 수에다가 1더해준 값을 문서의 이름과 id로 정해준다.
+                    Log.d("TAG", foodNum.toString())
+                }
+                .addOnFailureListener { exception ->
+
+                }
+            /////////////////////////////////////////////////////////////////////
+
+ */
         }
         ///////////////////////////////////////////////////////////////////////
 

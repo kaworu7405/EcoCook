@@ -8,6 +8,9 @@ class UserFridge {
     var buyDate : Int = 20211029 //산 날짜
     var expiryDate : Int = 20211029 //유통기한
     var num : Int = 5 //개수
+    var id : Int=0
+
+
 }
 
 /*
