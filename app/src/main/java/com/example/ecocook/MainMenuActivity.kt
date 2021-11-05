@@ -8,27 +8,24 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ecocook.manage_fridge.MyFridge
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.auth.User
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.getField
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_mainmenu.*
 
 class MainMenuActivity : AppCompatActivity(), View.OnClickListener {
     var backKeyPressedTime: Long = 0
+    val foodArr = ArrayList<UserFridge>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mainmenu)
 
-
         val user = Firebase.auth.currentUser
-
         if (user != null) { //null이 아니면
             val db = Firebase.firestore
             val docRef = db.collection("users").document(user.uid)
@@ -89,10 +86,6 @@ class MainMenuActivity : AppCompatActivity(), View.OnClickListener {
                                 for (i in obj.ingredients!!) {
                                     Log.d("TAG", i)
                                 }
-                                // 요리 하는 방법 출력하기
-                                for (i in obj.instruction!!) {
-                                    Log.d("TAG", i)
-                                }
                             }
                         }
                     }
@@ -114,27 +107,36 @@ class MainMenuActivity : AppCompatActivity(), View.OnClickListener {
             */
             ////////////////////////////////////////////////////////////////////
 
-
 /*
             ////////////////////////////////////////////////////////////////////
             //유저의 냉장고에 있는 음식을 삭제하는 코드입니다
-            if (f != null) {
-                f.document("음식id").delete().addOnSuccessListener{
-                    //삭제가 잘 된 경우 코드
-                    Log.d("TAG", "DocumentSnapshot successfully deleted!")
-                }.addOnFailureListener{
-                    //삭제가 안 된 경우 코드
-                        e -> Log.w("TAG", "Error deleting document", e)
+            val deleteId=2 //여기에 삭제시킬 id 입력하시면 됩니다!
+            f.orderBy("id").get()
+                .addOnSuccessListener { result ->
+                    var foodNum=result.size()-1
+                    for(food in result){
+                        val obj = food.toObject<UserFridge>()
+                        if (obj != null && obj.id > deleteId) {
+                            val newObjId=obj.id-1
+                            obj.id = newObjId
+                            f.document(newObjId.toString()).set(obj)
+                            if(foodNum==obj.id){
+                                f.document((obj.id+1).toString()).delete()
+                            }
+                        }
+                    }
                 }
-            }
-            /////////////////////////////////////////////////////////////////
+                .addOnFailureListener { exception ->
+                }
+                //////////////////////////////////////////////
  */
+
 
 
             /////////////////////////////////////////////////////////////////////
             //유저의 냉장고에 있는 음식을 가져오는 코드입니다.
-
-            f.addSnapshotListener { querySnapshot: QuerySnapshot?, _: FirebaseFirestoreException? ->
+/*
+            f.orderBy("id").addSnapshotListener { querySnapshot: QuerySnapshot?, _: FirebaseFirestoreException? ->
                 if (querySnapshot != null) {
                     // 반복문으로 모든 음식에 접근합니다.(document가 음식)
                     // UserFridge.kt에 각 필드 설명 적혀있습니다!
@@ -148,6 +150,8 @@ class MainMenuActivity : AppCompatActivity(), View.OnClickListener {
                     }
                 }
             }
+ */
+            /////////////////////////////////////////////////////////////////////////
 
 /*
             //UserFridge.kt의 class를 object화 하여 db에 저장해줍니다.
@@ -155,7 +159,7 @@ class MainMenuActivity : AppCompatActivity(), View.OnClickListener {
             //유저의 냉장고에 새로운 음식을 추가하는 코드입니다.
             f.get()
                 .addOnSuccessListener { result ->
-                    var foodNum=result.size()+1 //현재 냉장고에 저장되어있는 음식의 수에다가 1 더해준 값
+                    var foodNum = result.size() + 1 //현재 냉장고에 저장되어있는 음식의 수에다가 1 더해준 값
                     val data = hashMapOf(
                         "category" to "과일",
                         "name" to "메론",
@@ -166,15 +170,18 @@ class MainMenuActivity : AppCompatActivity(), View.OnClickListener {
                         "num" to 7,
                         "id" to foodNum
                     )
-                    f.document(foodNum.toString()).set(data) // 현재 냉장고에 저장되어있는 음식의 수에다가 1더해준 값을 문서의 이름과 id로 정해준다.
+                    f.document(foodNum.toString())
+                        .set(data) // 현재 냉장고에 저장되어있는 음식의 수에다가 1더해준 값을 문서의 이름과 id로 정해준다.
                     Log.d("TAG", foodNum.toString())
                 }
                 .addOnFailureListener { exception ->
-
                 }
             /////////////////////////////////////////////////////////////////////
 
+
+
  */
+
         }
         ///////////////////////////////////////////////////////////////////////
 
@@ -182,6 +189,45 @@ class MainMenuActivity : AppCompatActivity(), View.OnClickListener {
             startActivity(Intent(this, MyPageActivity::class.java))
         }
         ManageFridgeButton.setOnClickListener(this)         //냉장고 관리로 클릭
+
+        GroceriesButton.setOnClickListener {
+            startActivity(Intent(this, PostingActivity::class.java))
+        }
+
+        //좋아요한 DB TEST BUTTON!
+        DbTestButton3.setOnClickListener {
+            if (user != null) { //null이 아니면
+                val db = Firebase.firestore
+                val docRef = db.collection("users").document(user.uid)
+                docRef.get().addOnSuccessListener { documentSnapshot ->
+                    val obj = documentSnapshot.toObject<MemberInfo>()
+
+                    //사용자가 좋아요한 recipes가져오기
+                    //split 함수는 ]기준으로 문자열 잘라서 배열에 저장하는 함수
+                    //즉 array[0]에는 레시피이름, array[1]에는 url
+                    val array = obj?.myRecipes?.get(0)?.split("]")
+                    val recipeName = array?.get(0) //recipeName에는 레시피이름(예로들면 "간장파스타")가 저장됨
+                    if (obj != null) {
+                        Log.d("TAG", obj.name.toString())
+                    }
+
+                    /*
+                    //myRecipes 배열 0번째에 '간장파스타'가 저장되어있고 이걸 삭제하려고 한다면?
+                    //삭제하는 코드!
+                    if (obj != null) {
+                        obj.myRecipes?.removeAt(0)
+                        docRef.set(obj)
+                    }
+                    */
+
+                    //사용자가 recipe를 좋아요해서 좋아요한 레시피를 추가한다면
+                    if (obj != null) {
+                        obj.myRecipes?.add("간장파스타]https://www.10000recipe.com/recipe/6762181")
+                        docRef.set(obj)
+                    }
+                }
+            }
+        }
     }
 
     override fun onBackPressed() {                          //이거 뒤로가기 누르는거 연속으로 눌러야 꺼지거나 그런건가?
