@@ -75,7 +75,13 @@
                 android:id="@+id/DbTestButton2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="냉장고 DB TEST" />
+                android:text="냉장고DB에 음식 추가 TEST" />
+
+            <Button
+                android:id="@+id/DbTestButton3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="좋아요한 레시피 DB TEST" />
         </LinearLayout>
 
     </LinearLayout>
