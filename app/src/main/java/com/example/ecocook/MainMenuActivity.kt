@@ -66,7 +66,6 @@ class MainMenuActivity : AppCompatActivity(), View.OnClickListener {
         DbTestButton.setOnClickListener {
             val db = Firebase.firestore
 
-            val recipesRef = db.collection("recipes")
             db.collection("recipes")
                 .addSnapshotListener { querySnapshot: QuerySnapshot?, e: FirebaseFirestoreException? ->
                     if (querySnapshot != null) {

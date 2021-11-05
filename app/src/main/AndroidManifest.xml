@@ -13,6 +13,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EcoCook">
         <activity
+            android:name=".manage_fridge.RemoveIngredient"
+            android:exported="true" />
+        <activity
+            android:name=".manage_fridge.AddIngredient"
+            android:exported="true" />
+        <activity
             android:name=".manage_fridge.MyFridge"
             android:exported="true" />
         <activity
@@ -33,5 +39,4 @@
         <activity android:name=".PostingActivity"></activity>>
         <activity android:name=".PostingDetailActivity"></activity>>
     </application>
-
 </manifest>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="test_id_01" type="id"/>
+    <item name="test_id_02" type="id"/>
+    <item name="test_id_03" type="id"/>
+    <item name="test_id_04" type="id"/>
+    <item name="test_id_05" type="id"/>
+
+    <array name="id_group_1">
+        <item>@id/test_id_01</item>
+        <item>@id/test_id_02</item>
+        <item>@id/test_id_03</item>
+        <item>@id/test_id_04</item>
+        <item>@id/test_id_05</item>
+    </array>
+
+    <item name="item_01" type="id"/>
+    <item name="item_02" type="id"/>
+    <item name="item_03" type="id"/>
+    <item name="item_04" type="id"/>
+    <item name="item_05" type="id"/>
+
+    <array name="item_group_1">
+        <item>@id/item_01</item>
+        <item>@id/item_02</item>
+        <item>@id/item_03</item>
+        <item>@id/item_04</item>
+        <item>@id/item_05</item>
+    </array>
+</resources>
