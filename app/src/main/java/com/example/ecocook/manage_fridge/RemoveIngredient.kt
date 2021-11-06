@@ -6,10 +6,18 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.*
 import com.example.ecocook.R
+import com.example.ecocook.UserFridge
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_my_fridge.*
 import kotlinx.android.synthetic.main.activity_remove_ingredient.*
 
@@ -18,6 +26,7 @@ class RemoveIngredient : AppCompatActivity() {
     var icount = 0      //현재 만들어진 재료
     var lcount = 0      //현재 만들어진 줄 개수
     var check_array=ArrayList<Boolean>()
+    val user = Firebase.auth.currentUser
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_remove_ingredient)
@@ -26,10 +35,22 @@ class RemoveIngredient : AppCompatActivity() {
             finish()
         })
         select_remove_btn.setOnClickListener(View.OnClickListener {     //삭제 버튼
+            val db = Firebase.firestore
+            val f = db.collection(user?.uid.toString())
             for(i in 0..icount-1){
                 if(check_array[i]==true)
-                    ingredient-=1
+                    if (f != null) {
+                        f.document((i+1).toString()).delete().addOnSuccessListener{
+                            //삭제가 잘 된 경우 코드
+                            Log.d("TAG", "DocumentSnapshot successfully deleted!")
+                            ingredient-=1
+                        }.addOnFailureListener{
+                            //삭제가 안 된 경우 코드
+                                e -> Log.w("TAG", "Error deleting document", e)
+                        }
+                    }
             }
+
             var pref = getSharedPreferences("pref",Context.MODE_PRIVATE)   //앱종료되도 값 유지
             pref.edit().putInt("ingredient",ingredient).apply()         //ingredient값 저장
             startActivity(Intent(this, MyFridge::class.java))
@@ -44,6 +65,26 @@ class RemoveIngredient : AppCompatActivity() {
         super.onStart()
         var pref = getSharedPreferences("pref", Context.MODE_PRIVATE)
         ingredient = pref.getInt("ingredient",0)            //ingredient값 가져오기
+        val db = Firebase.firestore
+        val f = db.collection(user?.uid.toString())
+        f.addSnapshotListener { querySnapshot: QuerySnapshot?, _: FirebaseFirestoreException? ->
+            if (querySnapshot != null) {
+                // 반복문으로 모든 음식에 접근합니다.(document가 음식)
+                // UserFridge.kt에 각 필드 설명 적혀있습니다!
+                for (document in querySnapshot.documents) {
+                    val obj = document.toObject<UserFridge>()
+                    if (obj != null) {
+                        if(icount==lcount*3){
+                            AddTablerow()
+                            lcount+=1
+                        }
+                        AddLinear()
+                        AddIngredient(obj.name.toString(),obj.expiryDate.toString())
+                        icount+=1
+                    }
+                }
+            }
+        }/*
         for(i in 0..ingredient-1){      //ingredient값만큼 재료가 있므르로 재료들 보여주기 0부터로 해서 ingredient-1
             if(icount==lcount*3){       //한 줄에 3개씩 보여주기 위함
                 AddTablerow()           //tablerow 생성
@@ -52,7 +93,7 @@ class RemoveIngredient : AppCompatActivity() {
             AddLinear()                 //linearlayout생성
             AddIngredient()             //재료그림, 이름, 유통기한, 체크박스 생성
             icount+=1                   //어디까지 생성했는지 체크
-        }
+        }*/
     }
     fun AddTablerow(){        //한 줄 추가
         val LL= TableRow(this)
@@ -88,7 +129,7 @@ class RemoveIngredient : AppCompatActivity() {
 
     }
     @SuppressLint("ResourceType")   //이건 뭔지 잘 모르겠다, id=(int값)할 때 뜨는 에러때문에 추가
-    fun AddIngredient(){    //재료 추가
+    fun AddIngredient(a : String, b : String){    //재료 추가
         val img= ImageView(this)            //이미지
         img.setImageResource(R.drawable.testaa)
         img.scaleType= ImageView.ScaleType.CENTER_CROP      //scaleType을 center_crop으로
@@ -100,7 +141,7 @@ class RemoveIngredient : AppCompatActivity() {
         findViewById<LinearLayout>(62000+icount).addView(img)
 
         val textname = TextView(this)           //재료이름
-        textname.text = "감자"
+        textname.text = a
         textname.gravity= Gravity.CENTER
         textname.layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -111,7 +152,7 @@ class RemoveIngredient : AppCompatActivity() {
         findViewById<LinearLayout>(62000+icount).addView(textname)
 
         val textdate = TextView(this)       //유통기한
-        textdate.text = icount.toString()
+        textdate.text = b
         textdate.gravity= Gravity.CENTER
         textdate.layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT,
