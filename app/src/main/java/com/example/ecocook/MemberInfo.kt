@@ -5,5 +5,6 @@ data class MemberInfo(
     val phoneNumber:String?=null,
     val birthDay:String?=null,
     val address:String?=null,
-    val myRecipes: ArrayList<String>?=null
+    val myRecipes: ArrayList<String>?=null,
+    val auth : String?=null
 )

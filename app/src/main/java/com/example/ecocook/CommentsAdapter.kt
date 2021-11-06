@@ -6,9 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import kotlinx.android.synthetic.main.activity_posting_detail.*
+import android.app.Activity as Activity
 
 class CommentsAdapter (
     val mContext : Context,
@@ -18,6 +23,7 @@ class CommentsAdapter (
     ) : ArrayAdapter<Map<String, String>>(mContext, resId, mList) {
 
     val inf = LayoutInflater.from(mContext)
+    val glide=Glide.with(mContext)
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var tempRow = convertView
         if (tempRow == null) {
@@ -28,6 +34,7 @@ class CommentsAdapter (
         val data = mList[position]
         val userIdText = row.findViewById<TextView>(R.id.userIdText)
         val commentContentText = row.findViewById<TextView>(R.id.commentText)
+        val img=row.findViewById<ImageView>(R.id.userImg)
 
         val db = Firebase.firestore
         val keyName=data.keys.toString().replace("[", "").replace("]", "")
@@ -36,9 +43,20 @@ class CommentsAdapter (
         docRef.get()
             .addOnSuccessListener{document->
                 userIdText.text= document.get("name").toString()
+
+                var fileName="profile_"+keyName+".jpg"
+
+                val storageRef=Firebase.storage.reference.child("profile_img/"+fileName)
+                storageRef.downloadUrl.addOnSuccessListener { uri->
+                        glide.load(uri).into(img)
+                }.addOnFailureListener {
+                    // Handle any errors
+                }
             }
 
         commentContentText.text = "${data[keyName]}"
+
+
 
         return row
     }

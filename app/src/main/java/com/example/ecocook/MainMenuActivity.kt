@@ -11,7 +11,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.firestore.auth.User
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -56,9 +55,9 @@ class MainMenuActivity : AppCompatActivity(), View.OnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
         }
 
-        TempLogoutButton.setOnClickListener { //로그아웃 버튼
-            FirebaseAuth.getInstance().signOut() //로그아웃
-            startActivity(Intent(this, LoginActivity::class.java))//Login Activity로 이동
+        functionButton.setOnClickListener { //설정화면 가기 버튼
+            startActivity(Intent(this, functionActivity::class.java))
+
         }
 
         //레시피 DB TEST할 수 있는 버튼!

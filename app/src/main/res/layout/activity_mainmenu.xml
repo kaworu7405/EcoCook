@@ -9,13 +9,13 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/TempLogoutButton"
+            android:id="@+id/functionButton"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="280dp"
             android:layout_marginTop="10dp"
             android:backgroundTint="#FFFFFF"
-            android:text="로그아웃" />
+            android:text="설정" />
 
         <TextView
             android:id="@+id/EcoCookText"

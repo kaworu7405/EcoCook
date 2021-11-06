@@ -1,12 +1,18 @@
 package com.example.ecocook
 
+import android.content.Context
 import android.graphics.Point
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import com.squareup.okhttp.internal.Internal.instance
+import kotlinx.android.synthetic.main.activity_my_page.*
 import kotlinx.android.synthetic.main.activity_posting_detail.*
 import kotlinx.android.synthetic.main.comment_view.*
 import kotlinx.android.synthetic.main.post_view.*
@@ -19,16 +25,49 @@ class PostingDetailActivity : AppCompatActivity(){
 
         postingContentText.movementMethod = ScrollingMovementMethod()
         setValues()
+
+        commentInputBtn.setOnClickListener {
+            val postingInfo=intent.getSerializableExtra("postingInfo") as Posting
+
+            var arr=ArrayList<Map<String, String>>()
+            var comments=postingInfo.comments
+            if (comments != null) {
+                for( comment in comments){
+                    arr.add(comment)
+                }
+            }
+            val user = Firebase.auth.currentUser
+            if (user != null) {
+                arr.add(mapOf(user.uid.toString() to commentInputText.text.toString()))
+            }
+
+            postingInfo.comments=arr
+
+            val docRef = Firebase.firestore.collection("Posting").document(postingInfo.id.toString())
+            docRef.set(postingInfo)
+
+            val commentAdapter= CommentsAdapter(this, R.layout.comment_view, arr)
+            commentListView.adapter=commentAdapter
+
+            commentInputText.setText("")
+        }
     }
 /*
 val comments : List<Map<String, String>>?=null, //댓글
  */
     fun setValues(){
         val postingInfo=intent.getSerializableExtra("postingInfo") as Posting
-
+        getFireBaseProfileImage(postingInfo.userId.toString())
+        getFireBaseFoodImage(postingInfo.id.toString())
         buyDateText.text=postingInfo.buyDate.toString()
         expiryDateText.text=postingInfo.expiryDate.toString()
         postingContentText.text=postingInfo.postingContent.toString()
+        if(postingInfo.price=="0"){
+            priceTextView.text="나눔"
+        }else{
+            priceTextView.text=postingInfo.price.toString()+"원"
+        }
+
         if(!postingInfo.area1.toString().equals(postingInfo.area2.toString()))
         {
             areaText.text=postingInfo.area1.toString()+" "+postingInfo.area2.toString()
@@ -40,13 +79,35 @@ val comments : List<Map<String, String>>?=null, //댓글
         .addOnSuccessListener{document->
             postingUser.text= document.get("name").toString()
         }
+
         val commentAdapter= postingInfo.comments?.let {
         CommentsAdapter(this, R.layout.comment_view,
             it
         )
     }
     commentListView.adapter=commentAdapter
+    }
 
+    fun getFireBaseProfileImage(uid:String){ //profile 사진을 ImageView에 설정해주는 함수
+        var fileName="profile_"+uid+".jpg"
+
+        val storageRef=Firebase.storage.reference.child("profile_img/"+fileName)
+        storageRef.downloadUrl.addOnSuccessListener { uri->
+            Glide.with(this).load(uri).into(userImageView)
+        }.addOnFailureListener {
+            // Handle any errors
+        }
+    }
+
+    fun getFireBaseFoodImage(id:String){
+        var fileName="posting_"+id+".jpg"
+
+        val storageRef=Firebase.storage.reference.child("posting_img/"+fileName)
+        storageRef.downloadUrl.addOnSuccessListener { uri->
+            Glide.with(this).load(uri).into(postingFoodImg)
+        }.addOnFailureListener {
+            // Handle any errors
+        }
     }
 }
 

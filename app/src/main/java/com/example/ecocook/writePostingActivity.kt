@@ -8,14 +8,13 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.*
 import android.widget.ArrayAdapter
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import kotlinx.android.synthetic.main.activity_posting_detail.*
 import kotlinx.android.synthetic.main.activity_write_posting.*
 
 class writePostingActivity : AppCompatActivity() {
@@ -28,6 +27,8 @@ class writePostingActivity : AppCompatActivity() {
 
         isForSharing()
         setAreaSpinner1()
+        setBuyDateSpinner()
+        setExpiryDateSpinner()
 
         writePostingBtn.setOnClickListener {
             writePosting()
@@ -35,6 +36,10 @@ class writePostingActivity : AppCompatActivity() {
 
         imgUrl.setOnClickListener {
             openGallery()
+        }
+
+        cancelBtn.setOnClickListener {
+            finish()
         }
 
     }
@@ -68,25 +73,13 @@ class writePostingActivity : AppCompatActivity() {
             return
         }
         val price = priceText.text
-        if (!buyYear.isSelected || !buyMonth.isSelected || !buyDay.isSelected) {
-            Toast.makeText(
-                baseContext, "구매일자를 입력해주세요.",
-                Toast.LENGTH_SHORT
-            ).show()
-            return
-        }
+
         val buyDate =
-            areaSpinner1.selectedItem.toString() + areaSpinner2.selectedItem.toString() + expiryDay.selectedItem.toString()
-        if (!areaSpinner1.isSelected || !areaSpinner2.isSelected || !expiryDay.isSelected) {
-            Toast.makeText(
-                baseContext, "유통기한을 입력해주세요.",
-                Toast.LENGTH_SHORT
-            ).show()
-            return
-        }
+            buyYearSpinner.selectedItem.toString() + "." + buyMonthSpinner.selectedItem.toString() + "." + buyDaySpinner.selectedItem.toString()
+
         val expiryDate =
-            areaSpinner1.selectedItem.toString() + areaSpinner2.selectedItem.toString() + expiryDay.selectedItem.toString()
-        if (!postingContentTxt.text.isEmpty()) {
+            expiryYearSpinner.selectedItem.toString() + "." + expiryMonthSpinner.selectedItem.toString() + "." + expiryDaySpinner.selectedItem.toString()
+        if (postingContentTxt.text.isEmpty()) {
             Toast.makeText(
                 baseContext, "내용을 입력해주세요.",
                 Toast.LENGTH_SHORT
@@ -103,14 +96,15 @@ class writePostingActivity : AppCompatActivity() {
             return
         }
 
-        if(areaSpinner1.selectedItemPosition ==0){
+        if (areaSpinner1.selectedItemPosition == 0) {
             Toast.makeText(
                 baseContext, "시/도를 선택해주세요",
                 Toast.LENGTH_SHORT
             ).show()
             return
         }
-        if(areaSpinner2.selectedItemPosition ==0){
+
+        if (areaSpinner2.selectedItemPosition == 0) {
             Toast.makeText(
                 baseContext, "구/동을 선택해주세요",
                 Toast.LENGTH_SHORT
@@ -123,20 +117,23 @@ class writePostingActivity : AppCompatActivity() {
         val f = db.collection("Posting").orderBy("id").get().addOnSuccessListener { result ->
             val postingNum = result.size() + 1
             if (user != null) {
-                obj.userId = user.uid.toString()
+                obj.userId = user.uid
                 obj.id = postingNum.toString()
                 obj.postingTitle = postingTitle.toString()
                 obj.postingContent = content.toString()
                 obj.comments = null
-                obj.auth = null//이후에 추가
+                obj.auth = null
                 obj.buyDate = buyDate
                 obj.expiryDate = expiryDate
-
-
-
+                obj.price = price.toString()
+                val docRef = Firebase.firestore.collection("users").document(user.uid)
+                docRef.get()
+                    .addOnSuccessListener{document->
+                        obj.auth= document.get("auth").toString()
+                    }
 
                 var fileName = "posting_" + obj.id + ".jpg"
-
+                obj.imgUrl=("posting_img/" + fileName)
                 val storageRef = Firebase.storage.reference.child("posting_img/" + fileName)
 
                 var uploadTask = storageRef.putFile(imageUrl!!)
@@ -185,16 +182,141 @@ class writePostingActivity : AppCompatActivity() {
             }
         }
     }
-/*
-val areaArray1:Array<String> = resources.getStringArray(R.array.areaArray)
-        val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,areaArray1)
- */
+
+    fun setBuyDateSpinner() {
+        var buyYearArr = resources.getStringArray(R.array.yearArray)
+        buyYearSpinner.adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            buyYearArr
+        )
+
+        var buyMonthArr = resources.getStringArray(R.array.monthArray)
+        buyMonthSpinner.adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            buyMonthArr
+        )
+
+        setBuyDaySpinner(R.array.dayArray31)
+
+        buyMonthSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                if (position == 0) {
+                    setBuyDaySpinner(R.array.dayArray31)
+                } else if (position == 1) {
+                    setBuyDaySpinner(R.array.dayArray29)
+                } else if (position == 2) {
+                    setBuyDaySpinner(R.array.dayArray31)
+                } else if (position == 3) {
+                    setBuyDaySpinner(R.array.dayArray30)
+                } else if (position == 4) {
+                    setBuyDaySpinner(R.array.dayArray31)
+                } else if (position == 5) {
+                    setBuyDaySpinner(R.array.dayArray30)
+                } else if (position == 6) {
+                    setBuyDaySpinner(R.array.dayArray31)
+                } else if (position == 7) {
+                    setBuyDaySpinner(R.array.dayArray31)
+                } else if (position == 8) {
+                    setBuyDaySpinner(R.array.dayArray30)
+                } else if (position == 9) {
+                    setBuyDaySpinner(R.array.dayArray31)
+                } else if (position == 10) {
+                    setBuyDaySpinner(R.array.dayArray30)
+                } else if (position == 11) {
+                    setBuyDaySpinner(R.array.dayArray31)
+                }
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+            }
+        }
+    }
+
+    fun setBuyDaySpinner(i: Int) {
+        buyDaySpinner.adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            resources.getStringArray(i)
+        )
+    }
+
+    fun setExpiryDaySpinner(i: Int) {
+        expiryDaySpinner.adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            resources.getStringArray(i)
+        )
+    }
+
+    fun setExpiryDateSpinner(){
+        var expiryYearArr = resources.getStringArray(R.array.yearArray)
+        expiryYearSpinner.adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            expiryYearArr
+        )
+
+        var expiryMonthArr = resources.getStringArray(R.array.monthArray)
+        expiryMonthSpinner.adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            expiryMonthArr
+        )
+
+        setExpiryDaySpinner(R.array.dayArray31)
+
+        expiryMonthSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                if (position == 0) {
+                    setExpiryDaySpinner(R.array.dayArray31)
+                } else if (position == 1) {
+                    setExpiryDaySpinner(R.array.dayArray29)
+                } else if (position == 2) {
+                    setExpiryDaySpinner(R.array.dayArray31)
+                } else if (position == 3) {
+                    setExpiryDaySpinner(R.array.dayArray30)
+                } else if (position == 4) {
+                    setExpiryDaySpinner(R.array.dayArray31)
+                } else if (position == 5) {
+                    setExpiryDaySpinner(R.array.dayArray30)
+                } else if (position == 6) {
+                    setExpiryDaySpinner(R.array.dayArray31)
+                } else if (position == 7) {
+                    setExpiryDaySpinner(R.array.dayArray31)
+                } else if (position == 8) {
+                    setExpiryDaySpinner(R.array.dayArray30)
+                } else if (position == 9) {
+                    setExpiryDaySpinner(R.array.dayArray31)
+                } else if (position == 10) {
+                    setExpiryDaySpinner(R.array.dayArray30)
+                } else if (position == 11) {
+                    setExpiryDaySpinner(R.array.dayArray31)
+                }
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+            }
+        }
+    }
+
     fun setAreaSpinner1() {
-        var areaArr=R.array.areaArray
+        var areaArr = resources.getStringArray(R.array.areaArray)
         areaSpinner1.adapter = ArrayAdapter(
             this,
             android.R.layout.simple_spinner_dropdown_item,
-            resources.getStringArray(areaArr)
+            areaArr
         )
 
         areaSpinner1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -204,51 +326,66 @@ val areaArray1:Array<String> = resources.getStringArray(R.array.areaArray)
                 position: Int,
                 id: Long
             ) {
-                if(position==0){
+                obj.area1 = areaArr.get(position)
+
+                if (position == 0) {
                     setAreaSpinner2(R.array.allAreaArray)
-                }
-                else if(position==1){
+                } else if (position == 1) {
                     setAreaSpinner2(R.array.seoulArray)
-                } else if(position==2){
+                } else if (position == 2) {
                     setAreaSpinner2(R.array.gyeonggiArray)
-                } else if(position==3){
+                } else if (position == 3) {
                     setAreaSpinner2(R.array.incheonArray)
-                } else if(position==4){
+                } else if (position == 4) {
                     setAreaSpinner2(R.array.gangwonArray)
-                } else if(position==5){
+                } else if (position == 5) {
                     setAreaSpinner2(R.array.jejuArray)
-                } else if(position==6){
+                } else if (position == 6) {
                     setAreaSpinner2(R.array.busanArray)
-                } else if(position==7){
+                } else if (position == 7) {
                     setAreaSpinner2(R.array.gyeongnamArray)
-                } else if(position==8){
+                } else if (position == 8) {
                     setAreaSpinner2(R.array.daeguArray)
-                } else if(position==9){
+                } else if (position == 9) {
                     setAreaSpinner2(R.array.gyeongbukArray)
-                } else if(position==10){
+                } else if (position == 10) {
                     setAreaSpinner2(R.array.ulsanArray)
-                } else if(position==11){
+                } else if (position == 11) {
                     setAreaSpinner2(R.array.daejeonArray)
-                } else if(position==12){
+                } else if (position == 12) {
                     setAreaSpinner2(R.array.chungnamArray)
-                } else if(position==13){
+                } else if (position == 13){
                     setAreaSpinner2(R.array.chungbukArray)
-                } else if(position==14){
+                } else if (position == 14){
                     setAreaSpinner2(R.array.gawngjuArray)
-                } else if(position==15){
+                } else if (position == 15){
                     setAreaSpinner2(R.array.jeonnamArray)
-                } else if(position==16){
-                    setAreaSpinner2(R.array.gyeongbukArray)
+                } else if (position == 16){
+                    setAreaSpinner2(R.array.jeonbukArray)
                 }
 
             }
+
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
         }
 
+        areaSpinner2.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                obj.area2 = areaSpinner2.getItemAtPosition(position) as String?
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+        }
     }
 
-    fun setAreaSpinner2(i:Int){
+    fun setAreaSpinner2(i: Int) {
         areaSpinner2.adapter = ArrayAdapter(
             this,
             android.R.layout.simple_spinner_dropdown_item,
