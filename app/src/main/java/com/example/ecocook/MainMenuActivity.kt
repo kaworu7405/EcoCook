@@ -110,12 +110,15 @@ class MainMenuActivity : AppCompatActivity(), View.OnClickListener {
 /*
             ////////////////////////////////////////////////////////////////////
             //유저의 냉장고에 있는 음식을 삭제하는 코드입니다
-            val deleteId=2 //여기에 삭제시킬 id 입력하시면 됩니다!
+            val deleteId=3 //여기에 삭제시킬 id 입력하시면 됩니다!
             f.orderBy("id").get()
                 .addOnSuccessListener { result ->
                     var foodNum=result.size()-1
                     for(food in result){
                         val obj = food.toObject<UserFridge>()
+
+                        Log.d("TAG", obj.id.toString())
+
                         if (obj != null && obj.id > deleteId) {
                             val newObjId=obj.id-1
                             obj.id = newObjId
@@ -125,14 +128,16 @@ class MainMenuActivity : AppCompatActivity(), View.OnClickListener {
                             }
                         }
                     }
+                    if(deleteId==result.size()){
+                        f.document(deleteId.toString()).delete()
+                    }
                 }
                 .addOnFailureListener { exception ->
                 }
                 //////////////////////////////////////////////
+
+
  */
-
-
-
             /////////////////////////////////////////////////////////////////////
             //유저의 냉장고에 있는 음식을 가져오는 코드입니다.
 /*
@@ -151,6 +156,7 @@ class MainMenuActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
  */
+
             /////////////////////////////////////////////////////////////////////////
 
 /*
@@ -181,6 +187,10 @@ class MainMenuActivity : AppCompatActivity(), View.OnClickListener {
 
 
  */
+
+
+
+
 
         }
         ///////////////////////////////////////////////////////////////////////

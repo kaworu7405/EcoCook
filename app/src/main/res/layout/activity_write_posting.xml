@@ -22,13 +22,13 @@
                 android:layout_width="321dp"
                 android:layout_height="42dp"
                 android:layout_marginStart="40dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/edit_round"
                 android:gravity="center"
                 android:text="게시글 작성" />
 
             <EditText
-                android:id="@+id/editTextTextPersonName"
+                android:id="@+id/postingTitleText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#000000"
@@ -37,9 +37,10 @@
                 android:inputType="textPersonName" />
 
             <ImageButton
-                android:id="@+id/imageButton"
-                android:layout_width="match_parent"
-                android:layout_height="202dp"
+                android:id="@+id/imgUrl"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
                 app:srcCompat="@android:drawable/ic_menu_gallery" />
 
             <LinearLayout
@@ -48,7 +49,7 @@
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/editTextNumber"
+                    android:id="@+id/priceText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -56,7 +57,7 @@
                     android:inputType="number" />
 
                 <CheckBox
-                    android:id="@+id/checkBox"
+                    android:id="@+id/shareCheckBox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -65,68 +66,95 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/textView12"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="구매일자" />
 
                 <Spinner
-                    android:id="@+id/spinner4"
+                    android:id="@+id/buyYear"
                     android:layout_width="50dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="42dp"
                     android:layout_weight="1" />
 
                 <Spinner
-                    android:id="@+id/spinner5"
+                    android:id="@+id/buyMonth"
                     android:layout_width="50dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="42dp"
                     android:layout_weight="1" />
 
                 <Spinner
-                    android:id="@+id/spinner6"
+                    android:id="@+id/buyDay"
                     android:layout_width="50dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="42dp"
                     android:layout_weight="1" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textView12"
+                    android:id="@+id/textView8"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="구매일자" />
+                    android:text="유통기한" />
 
                 <Spinner
-                    android:id="@+id/spinner4"
+                    android:id="@+id/expiryYear"
                     android:layout_width="50dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="42dp"
                     android:layout_weight="1" />
 
                 <Spinner
-                    android:id="@+id/spinner5"
+                    android:id="@+id/expiryMonth"
                     android:layout_width="50dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="42dp"
                     android:layout_weight="1" />
 
                 <Spinner
-                    android:id="@+id/spinner6"
+                    android:id="@+id/expiryDay"
                     android:layout_width="50dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="42dp"
                     android:layout_weight="1" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/areaText2"
+                    android:layout_width="10dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="지역" />
+
+                <Spinner
+                    android:id="@+id/areaSpinner1"
+                    android:layout_width="100dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1" />
+
+                <Spinner
+                    android:id="@+id/areaSpinner2"
+                    android:layout_width="100dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
             <EditText
-                android:id="@+id/editTextTextPersonName4"
+                android:id="@+id/postingContentTxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -142,13 +170,13 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/button6"
+                    android:id="@+id/cancelBtn"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:text="CANCEL" />
 
                 <Button
-                    android:id="@+id/button7"
+                    android:id="@+id/writePostingBtn"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:text="OK" />
