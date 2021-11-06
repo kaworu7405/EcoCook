@@ -121,7 +121,7 @@ class ChangeProfileActivity: AppCompatActivity() {
             val user = Firebase.auth.currentUser
             val db = Firebase.firestore
 
-            val memberInfo = MemberInfo(name, phoneNumber, birthday,address, null)
+            val memberInfo = MemberInfo(name, phoneNumber, birthday,address, null, "[일반]")
 
             if(user!=null)
             {

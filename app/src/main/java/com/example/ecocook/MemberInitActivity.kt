@@ -42,7 +42,7 @@ class MemberInitActivity : AppCompatActivity() {
             val user = Firebase.auth.currentUser
             val db = Firebase.firestore
 
-            val memberInfo = MemberInfo(name, phoneNumber, birthday,address)
+            val memberInfo = MemberInfo(name, phoneNumber, birthday,address, null, "[일반]")
 
             if(user!=null)
             {

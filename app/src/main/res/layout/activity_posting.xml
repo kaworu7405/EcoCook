@@ -5,142 +5,137 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="321dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/edit_round"
+            android:gravity="center"
+            android:text="식료품 게시판" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="321dp"
-                android:layout_height="42dp"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/edit_round"
-                android:gravity="center"
-                android:text="식료품 게시판" />
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="100dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/textView5"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="시/도" />
-
-                    <ListView
-                        android:id="@+id/areaList1"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="100dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/textView6"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="구" />
-
-                    <ListView
-                        android:id="@+id/areaList2"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:orientation="vertical">
-
-                    <CheckBox
-                        android:id="@+id/checkBox4"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:enabled="false"
-                        android:text="사장님" />
-
-                    <CheckBox
-                        android:id="@+id/checkBox5"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:enabled="false"
-                        android:text="개인" />
-
-                    <CheckBox
-                        android:id="@+id/checkBox6"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:text="전체" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/findBtn"
-                    android:layout_width="1dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="검색" />
-
-                <EditText
-                    android:id="@+id/editTextTextPersonName2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="textPersonName" />
-
-                <Button
-                    android:id="@+id/postingBtn"
-                    android:layout_width="40dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="게시글 작성" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
-                <ListView
-                    android:id="@+id/postingList"
+                <TextView
+                    android:id="@+id/textView5"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="시/도" />
+
+                <ListView
+                    android:id="@+id/areaList1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="구" />
+
+                <ListView
+                    android:id="@+id/areaList2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/AuthCheckBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:text="인증" />
+
+                <CheckBox
+                    android:id="@+id/noAuthCheckBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:text="일반" />
+
+                <CheckBox
+                    android:id="@+id/allCheckBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="전체" />
             </LinearLayout>
 
         </LinearLayout>
-    </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/findBtn"
+                android:layout_width="1dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="검색" />
+
+            <EditText
+                android:id="@+id/searchInputText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName" />
+
+            <Button
+                android:id="@+id/postingBtn"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="게시글 작성" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ListView
+                android:id="@+id/postingList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

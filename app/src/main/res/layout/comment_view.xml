@@ -21,10 +21,11 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="20dp">
 
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/userImg"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_gravity="center"
                     app:srcCompat="@drawable/ic_baseline_account_circle_24" />
             </androidx.cardview.widget.CardView>
 
