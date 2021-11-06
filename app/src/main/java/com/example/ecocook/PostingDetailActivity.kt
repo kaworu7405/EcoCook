@@ -29,6 +29,12 @@ val comments : List<Map<String, String>>?=null, //댓글
         buyDateText.text=postingInfo.buyDate.toString()
         expiryDateText.text=postingInfo.expiryDate.toString()
         postingContentText.text=postingInfo.postingContent.toString()
+        if(!postingInfo.area1.toString().equals(postingInfo.area2.toString()))
+        {
+            areaText.text=postingInfo.area1.toString()+" "+postingInfo.area2.toString()
+        }else {
+            areaText.text="전체 지역"
+        }
         val docRef = Firebase.firestore.collection("users").document(postingInfo.userId.toString())
         docRef.get()
         .addOnSuccessListener{document->

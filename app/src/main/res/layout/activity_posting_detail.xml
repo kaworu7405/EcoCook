@@ -119,6 +119,14 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:text="유통기한" />
+
+                        <TextView
+                            android:id="@+id/textView13"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="지역" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -140,8 +148,14 @@
                             android:layout_width="80dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="선택안함" />
+                            android:gravity="center" />
+
+                        <TextView
+                            android:id="@+id/areaText"
+                            android:layout_width="80dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center" />
                     </LinearLayout>
 
                 </LinearLayout>
