@@ -33,7 +33,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     public fun login() {
-        var email=emailEditText.text.toString()
+        var email=passwordChangeText.text.toString()
         var password=passwordEditText.text.toString()
 
         if(email.isNotEmpty() && password.isNotEmpty()) //이메일과 패스워드를 모두 입력
@@ -52,7 +52,7 @@ class LoginActivity : AppCompatActivity() {
                         }
                     } else {
                         // If sign in fails, display a message to the user.
-                        Toast.makeText(baseContext, "가입되지 않은 이메일입니다.",
+                        Toast.makeText(baseContext, "잘못된 이메일/비밀번호를 입력하셨습니다.",
                             Toast.LENGTH_SHORT).show()
                     }
                 }

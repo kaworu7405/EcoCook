@@ -4,7 +4,7 @@ data class MemberInfo(
     val name:String?=null,
     val phoneNumber:String?=null,
     val birthDay:String?=null,
-    val address:String?=null,
-    val myRecipes: ArrayList<String>?=null,
-    val auth : String?=null
+    var address:String?=null,
+    var myRecipes: ArrayList<String>?=null,
+    var auth : String?=null
 )

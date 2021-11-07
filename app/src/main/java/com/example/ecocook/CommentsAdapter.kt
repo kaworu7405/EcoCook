@@ -12,7 +12,6 @@ import com.bumptech.glide.Glide
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import kotlinx.android.synthetic.main.activity_posting_detail.*
 import android.app.Activity as Activity
 
 class CommentsAdapter (
@@ -55,9 +54,6 @@ class CommentsAdapter (
             }
 
         commentContentText.text = "${data[keyName]}"
-
-
-
         return row
     }
 }

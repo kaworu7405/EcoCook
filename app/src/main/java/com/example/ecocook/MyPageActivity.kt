@@ -20,6 +20,7 @@ class MyPageActivity: AppCompatActivity() {
         setContentView(R.layout.activity_my_page)
         user=Firebase.auth.currentUser
         val db = Firebase.firestore
+        getFireBaseProfileImage()//프로필이미지 설정
 
         val docRef = db.collection("users").document(user!!.uid)
         docRef.get()
@@ -42,7 +43,22 @@ class MyPageActivity: AppCompatActivity() {
             startActivity(Intent(this, ChangeProfileActivity::class.java))
         }
 
-        getFireBaseProfileImage()//프로필이미지 설정
+        authLoationBtn.setOnClickListener {
+            startActivity(Intent(this, AuthLocationActivity::class.java))
+        }
+
+
+        myPostingBtn.setOnClickListener {
+            startActivity(Intent(this, MyPostingActivity::class.java))
+        }
+
+        myCommentsBtn.setOnClickListener {
+            startActivity(Intent(this, MyCommentActivity::class.java))
+        }
+
+        messagePageBtn.setOnClickListener {
+            startActivity(Intent(this, MyMessageActivity::class.java))
+        }
     }
 
     fun getFireBaseProfileImage(){ //profile 사진을 ImageView에 설정해주는 함수
@@ -55,6 +71,4 @@ class MyPageActivity: AppCompatActivity() {
             // Handle any errors
         }
     }
-
-
 }

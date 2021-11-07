@@ -18,5 +18,19 @@ class functionActivity : AppCompatActivity() {
             startActivity(Intent(this, LoginActivity::class.java))//Login Activity로 이동
             finish()
         }
+
+        changePasswordBtn.setOnClickListener {
+            startActivity(Intent(this, passwordResetActivity::class.java))//Login Activity로 이동
+            finish()
+        }
+
+        sendEmailButton.setOnClickListener {
+            val email = Intent(Intent.ACTION_SEND)
+            email.type = "plain/text"
+            val address = arrayOf("201804232@o.cnu.ac.kr")
+            email.putExtra(Intent.EXTRA_EMAIL, address)
+            email.putExtra(Intent.EXTRA_SUBJECT, "ECOCOOK BUG REPORT")
+            startActivity(email)
+        }
     }
 }

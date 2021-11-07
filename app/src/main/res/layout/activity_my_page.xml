@@ -73,28 +73,28 @@
                 android:text="나의 관심 레시피" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/authLoationBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="내 동네 인증" />
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/myPostingBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="내가 쓴 글" />
 
             <Button
-                android:id="@+id/button4"
+                android:id="@+id/myCommentsBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="내가 쓴 댓글" />
 
             <Button
-                android:id="@+id/button5"
+                android:id="@+id/messagePageBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"

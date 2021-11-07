@@ -133,7 +133,8 @@
             <ListView
                 android:id="@+id/postingList"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:stackFromBottom="false" />
         </LinearLayout>
 
     </LinearLayout>
