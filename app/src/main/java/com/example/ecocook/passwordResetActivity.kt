@@ -1,13 +1,16 @@
 package com.example.ecocook
 
-import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_password_reset.*
+import kotlinx.android.synthetic.main.activity_sign_up.*
+import kotlinx.android.synthetic.main.activity_sign_up.passwordChangeText
 
 class passwordResetActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
@@ -17,31 +20,33 @@ class passwordResetActivity : AppCompatActivity() {
 
         auth = Firebase.auth
 
-
-        passwordResetEmailSendButton.setOnClickListener{
-            send()
+        passwordResetButton.setOnClickListener {
+            if (passwordTextView.text.isNotEmpty()&&passwordCheckTextView.text.isNotEmpty()) {
+                if (passwordTextView.text.toString().equals(passwordCheckTextView.text.toString())) {
+                    if (passwordTextView.text.toString().length >= 6) {
+                        changePassword(passwordTextView.text.toString())
+                    } else {
+                        Toast.makeText(this, "비밀번호를 6자리 이상으로 설정해주세요.", Toast.LENGTH_LONG).show()
+                    }
+                } else {
+                    Toast.makeText(this, "비밀번호와 확인 비밀번호가 맞지 않습니다.", Toast.LENGTH_LONG).show()
+                }
+            }
+            else {
+                Toast.makeText(this, "새로운 비밀번호를 입력해주세요.", Toast.LENGTH_LONG).show()
+            }
         }
 
     }
 
-    public fun send() {
-        var email=emailEditText.text.toString()
+    private fun changePassword(password:String){
+        FirebaseAuth.getInstance().currentUser!!.updatePassword(password).addOnCompleteListener { task ->
+            if(task.isSuccessful){
+                Toast.makeText(this, "비밀번호가 변경되었습니다.", Toast.LENGTH_LONG).show()
+            }else{
+                Toast.makeText(this, task.exception.toString(), Toast.LENGTH_LONG).show()
 
-
-        if(email.isNotEmpty()) //이메일 입력
-        {
-            auth.sendPasswordResetEmail(email).addOnCompleteListener(this){
-                if(it.isSuccessful){
-                    Toast.makeText(baseContext, "비밀번호 재설정 이메일을 보냈습니다.",
-                        Toast.LENGTH_SHORT).show()
-
-                    finish()
-                }
             }
-        }
-        else{ //이메일, 패스워드를 입력하지 않았음
-            Toast.makeText(baseContext, "이메일을 입력해주세요.",
-                Toast.LENGTH_SHORT).show()
         }
     }
 

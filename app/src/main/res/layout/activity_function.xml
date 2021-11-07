@@ -65,7 +65,7 @@
             android:id="@+id/sendEmailButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="버그 및 오류 신고" />
+            android:text="오류 신고" />
 
         <Button
             android:id="@+id/button10"

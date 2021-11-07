@@ -1,6 +1,5 @@
 package com.example.ecocook
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -34,7 +33,7 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     public fun signUp() {
-        var email=emailEditText.text.toString()
+        var email=passwordChangeText.text.toString()
         var password=passwordEditText.text.toString()
         var passwordCheck=passwordCheckEditText.text.toString()
 

@@ -10,6 +10,7 @@ import android.widget.AdapterView.*
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -20,15 +21,22 @@ import kotlinx.android.synthetic.main.activity_write_posting.*
 class writePostingActivity : AppCompatActivity() {
     var obj = Posting()
     var imageUrl: Uri? = null
-
+    var isRevise:Boolean=false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_write_posting)
 
-        isForSharing()
+
+        val postingInfo=intent.getSerializableExtra("postingInfo") as Posting
         setAreaSpinner1()
         setBuyDateSpinner()
         setExpiryDateSpinner()
+        if(postingInfo!=null){
+            initForRevising(postingInfo)
+            isRevise=true
+        }
+        isForSharing()
+
 
         writePostingBtn.setOnClickListener {
             writePosting()
@@ -39,9 +47,20 @@ class writePostingActivity : AppCompatActivity() {
         }
 
         cancelBtn.setOnClickListener {
+            val myIntent = Intent(this, PostingDetailActivity::class.java)
+            myIntent.putExtra("postingInfo", obj)
+            startActivity(myIntent)
             finish()
         }
 
+    }
+
+    fun initForRevising(postingInfo:Posting){
+        obj=postingInfo
+        postingTitleText.setText(postingInfo.postingTitle)
+        postingInfo.id?.let { getFireBaseFoodImage(it) }
+        priceText.setText(postingInfo.price)
+        postingContentTxt.setText(postingInfo.postingContent)
     }
 
     fun isForSharing() { //나눔인지 아닌지 체크
@@ -88,7 +107,7 @@ class writePostingActivity : AppCompatActivity() {
         }
         val content = postingContentTxt.text
 
-        if (imageUrl == null) {
+        if (imageUrl == null&&!isRevise) {
             Toast.makeText(
                 baseContext, "이미지를 첨부해주세요.",
                 Toast.LENGTH_SHORT
@@ -118,14 +137,15 @@ class writePostingActivity : AppCompatActivity() {
             val postingNum = result.size() + 1
             if (user != null) {
                 obj.userId = user.uid
-                obj.id = postingNum.toString()
                 obj.postingTitle = postingTitle.toString()
                 obj.postingContent = content.toString()
-                obj.comments = null
-                obj.auth = null
                 obj.buyDate = buyDate
                 obj.expiryDate = expiryDate
                 obj.price = price.toString()
+                if(!isRevise){
+                    obj.id = postingNum.toString()
+                    obj.comments = null
+                }
                 val docRef = Firebase.firestore.collection("users").document(user.uid)
                 docRef.get()
                     .addOnSuccessListener{document->
@@ -135,24 +155,16 @@ class writePostingActivity : AppCompatActivity() {
                 var fileName = "posting_" + obj.id + ".jpg"
                 obj.imgUrl=("posting_img/" + fileName)
                 val storageRef = Firebase.storage.reference.child("posting_img/" + fileName)
-
-                var uploadTask = storageRef.putFile(imageUrl!!)
-
-                uploadTask.addOnFailureListener {
-                    Toast.makeText(
-                        baseContext, "사진 업로드 성공!",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }.addOnSuccessListener {
-                    Toast.makeText(
-                        baseContext, "사진 업로드 실패..",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                if(imageUrl!=null) {
+                    var uploadTask = storageRef.putFile(imageUrl!!)
                 }
+                db.collection("Posting").document(obj.id.toString()).set(obj)
 
-                db.collection("Posting").document(postingNum.toString()).set(obj)
-
+                val myIntent = Intent(this, PostingDetailActivity::class.java)
+                myIntent.putExtra("postingInfo", obj)
+                startActivity(myIntent)
                 finish()
+
             }
         }.addOnFailureListener { exception ->
             Toast.makeText(
@@ -166,6 +178,17 @@ class writePostingActivity : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = MediaStore.Images.Media.CONTENT_TYPE
         startActivityForResult(intent, 1)
+    }
+
+    fun getFireBaseFoodImage(id:String){
+        var fileName="posting_"+id+".jpg"
+
+        val storageRef=Firebase.storage.reference.child("posting_img/"+fileName)
+        storageRef.downloadUrl.addOnSuccessListener { uri->
+            Glide.with(this).load(uri).into(imgUrl)
+        }.addOnFailureListener {
+            // Handle any errors
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

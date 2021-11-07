@@ -1,109 +1,200 @@
 package com.example.ecocook
 
-import android.content.Context
-import android.graphics.Point
+import android.content.Intent
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
-import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import com.squareup.okhttp.internal.Internal.instance
+import kotlinx.android.synthetic.main.activity_my_comment.*
 import kotlinx.android.synthetic.main.activity_my_page.*
 import kotlinx.android.synthetic.main.activity_posting_detail.*
 import kotlinx.android.synthetic.main.comment_view.*
 import kotlinx.android.synthetic.main.post_view.*
 
-class PostingDetailActivity : AppCompatActivity(){
+class PostingDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_posting_detail)
-
+        val db = Firebase.firestore
         postingContentText.movementMethod = ScrollingMovementMethod()
         setValues()
 
+        val postingInfo = intent.getSerializableExtra("postingInfo") as Posting
+        val user = Firebase.auth.currentUser
         commentInputBtn.setOnClickListener {
-            val postingInfo=intent.getSerializableExtra("postingInfo") as Posting
-
-            var arr=ArrayList<Map<String, String>>()
-            var comments=postingInfo.comments
+            var arr = ArrayList<Map<String, String>>()
+            var comments = postingInfo.comments
             if (comments != null) {
-                for( comment in comments){
+                for (comment in comments) {
                     arr.add(comment)
                 }
             }
-            val user = Firebase.auth.currentUser
+
             if (user != null) {
                 arr.add(mapOf(user.uid.toString() to commentInputText.text.toString()))
             }
 
-            postingInfo.comments=arr
+            postingInfo.comments = arr
 
-            val docRef = Firebase.firestore.collection("Posting").document(postingInfo.id.toString())
+            val docRef =
+                Firebase.firestore.collection("Posting").document(postingInfo.id.toString())
             docRef.set(postingInfo)
 
-            val commentAdapter= CommentsAdapter(this, R.layout.comment_view, arr)
-            commentListView.adapter=commentAdapter
+            val commentAdapter = CommentsAdapter(this, R.layout.comment_view, arr)
+            commentListView.adapter = commentAdapter
 
             commentInputText.setText("")
         }
-    }
-/*
-val comments : List<Map<String, String>>?=null, //댓글
- */
-    fun setValues(){
-        val postingInfo=intent.getSerializableExtra("postingInfo") as Posting
-        getFireBaseProfileImage(postingInfo.userId.toString())
-        getFireBaseFoodImage(postingInfo.id.toString())
-        buyDateText.text=postingInfo.buyDate.toString()
-        expiryDateText.text=postingInfo.expiryDate.toString()
-        postingContentText.text=postingInfo.postingContent.toString()
-        if(postingInfo.price=="0"){
-            priceTextView.text="나눔"
-        }else{
-            priceTextView.text=postingInfo.price.toString()+"원"
+
+        revisePostingBtn.setOnClickListener {
+            if (user != null) {
+                if (postingInfo.userId == user.uid) {
+                    val postingInfo = intent.getSerializableExtra("postingInfo") as Posting
+                    val myIntent = Intent(this, writePostingActivity::class.java)
+                    myIntent.putExtra("postingInfo", postingInfo)
+                    startActivity(myIntent)
+                } else {
+                    Toast.makeText(
+                        baseContext, "본인의 글만 수정 가능합니다.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            finish()
+        }
+        removePostingBtn.setOnClickListener {
+            if (user != null) {
+                if (postingInfo.userId == user.uid) {
+                    val docRef =
+                        Firebase.firestore.collection("Posting").document(postingInfo.id.toString())
+                    docRef.delete()
+                    Toast.makeText(
+                        baseContext, "삭제 완료 되었습니다.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        baseContext, "본인의 글만 삭제 가능합니다.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            finish()
         }
 
-        if(!postingInfo.area1.toString().equals(postingInfo.area2.toString()))
-        {
-            areaText.text=postingInfo.area1.toString()+" "+postingInfo.area2.toString()
-        }else {
-            areaText.text="전체 지역"
+        messageButton.setOnClickListener {
+            var alreadyHas=false
+            var resultNum:Int
+            db.collection("Message").get().addOnSuccessListener { result ->
+                if (result != null) {
+                    resultNum=result.size()
+                    for (document in result.documents) {
+                        val obj = document.toObject<Message>()
+                        if (obj != null) {
+                            if (user != null) {
+                                if(postingInfo.userId==user.uid){
+                                    Toast.makeText(
+                                        baseContext, "자신에게는 메세지를 보낼 수 없습니다.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    alreadyHas=true
+                                }
+                                else if(user.uid==obj.user1 && postingInfo.userId==obj.user2){
+                                    val myIntent = Intent(this, MessageActivity::class.java)
+                                    myIntent.putExtra("message", obj)
+
+                                    startActivity(myIntent)
+                                    alreadyHas=true
+                                }
+                                else if(user.uid==obj.user2 && postingInfo.userId==obj.user1){
+                                    val myIntent = Intent(this, MessageActivity::class.java)
+                                    myIntent.putExtra("message", obj)
+                                    startActivity(myIntent)
+                                    alreadyHas=true
+                                }
+                            }
+                        }
+                    }
+                    if(!alreadyHas){
+                        var fileName=(resultNum+1).toString()
+                        var m = Message(null, user?.uid, postingInfo.userId)
+                        db.collection("Message").document(fileName).set(m)
+
+                        val myIntent = Intent(this, MessageActivity::class.java)
+                        myIntent.putExtra("message", m)
+                        startActivity(myIntent)
+                    }
+                    /*
+                        fun postClicked() {
+        postingList.setOnItemClickListener { adapterView, view, i, l ->
+            val clickedPosting = postsList[i]
+            val myIntent = Intent(this, PostingDetailActivity::class.java)
+            myIntent.putExtra("postingInfo", clickedPosting)
+            startActivity(myIntent)
+        }
+    }
+                     */
+                }
+            }
+        }
+    }
+
+    fun setValues() {
+        val postingInfo = intent.getSerializableExtra("postingInfo") as Posting
+        getFireBaseProfileImage(postingInfo.userId.toString())
+        getFireBaseFoodImage(postingInfo.id.toString())
+        buyDateText.text = postingInfo.buyDate.toString()
+        expiryDateText.text = postingInfo.expiryDate.toString()
+        postingContentText.text = postingInfo.postingContent.toString()
+        if (postingInfo.price == "0") {
+            priceTextView.text = "나눔"
+        } else {
+            priceTextView.text = postingInfo.price.toString() + "원"
+        }
+
+        if (!postingInfo.area1.toString().equals(postingInfo.area2.toString())) {
+            areaText.text = postingInfo.area1.toString() + " " + postingInfo.area2.toString()
+        } else {
+            areaText.text = "전체 지역"
         }
         val docRef = Firebase.firestore.collection("users").document(postingInfo.userId.toString())
         docRef.get()
-        .addOnSuccessListener{document->
-            postingUser.text= document.get("name").toString()
+            .addOnSuccessListener { document ->
+                postingUser.text = document.get("name").toString()
+            }
+
+        val commentAdapter = postingInfo.comments?.let {
+            CommentsAdapter(
+                this, R.layout.comment_view,
+                it
+            )
         }
-
-        val commentAdapter= postingInfo.comments?.let {
-        CommentsAdapter(this, R.layout.comment_view,
-            it
-        )
-    }
-    commentListView.adapter=commentAdapter
+        commentListView.adapter = commentAdapter
     }
 
-    fun getFireBaseProfileImage(uid:String){ //profile 사진을 ImageView에 설정해주는 함수
-        var fileName="profile_"+uid+".jpg"
+    fun getFireBaseProfileImage(uid: String) { //profile 사진을 ImageView에 설정해주는 함수
+        var fileName = "profile_" + uid + ".jpg"
 
-        val storageRef=Firebase.storage.reference.child("profile_img/"+fileName)
-        storageRef.downloadUrl.addOnSuccessListener { uri->
+        val storageRef = Firebase.storage.reference.child("profile_img/" + fileName)
+        storageRef.downloadUrl.addOnSuccessListener { uri ->
             Glide.with(this).load(uri).into(userImageView)
         }.addOnFailureListener {
             // Handle any errors
         }
     }
 
-    fun getFireBaseFoodImage(id:String){
-        var fileName="posting_"+id+".jpg"
+    fun getFireBaseFoodImage(id: String) {
+        var fileName = "posting_" + id + ".jpg"
 
-        val storageRef=Firebase.storage.reference.child("posting_img/"+fileName)
-        storageRef.downloadUrl.addOnSuccessListener { uri->
+        val storageRef = Firebase.storage.reference.child("posting_img/" + fileName)
+        storageRef.downloadUrl.addOnSuccessListener { uri ->
             Glide.with(this).load(uri).into(postingFoodImg)
         }.addOnFailureListener {
             // Handle any errors

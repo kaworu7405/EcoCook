@@ -19,10 +19,12 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_posting.*
 import kotlinx.android.synthetic.main.activity_posting.view.*
 import kotlinx.android.synthetic.main.activity_write_posting.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 class PostingActivity : AppCompatActivity() {
 
-    var postsList = ArrayList<Posting>()
+    val postsList = ArrayList<Posting>()
     var area1 = "전체 지역"
     var area2 = "전체 지역"
 
@@ -50,7 +52,7 @@ class PostingActivity : AppCompatActivity() {
         val user = Firebase.auth.currentUser
         if (user != null) {
             val db = Firebase.firestore
-            db.collection("Posting").orderBy("id", Query.Direction.DESCENDING)
+            db.collection("Posting").orderBy("id")
                 .addSnapshotListener { querySnapshot: QuerySnapshot?, e: FirebaseFirestoreException? ->
                     if (querySnapshot != null) {
                         postsList.clear()
@@ -58,7 +60,7 @@ class PostingActivity : AppCompatActivity() {
                             val obj = document.toObject<Posting>()
                             if (obj != null) {
                                 if(obj.postingContent?.contains(findText) == true|| obj.postingTitle?.contains(findText) == true){
-                                    postsList.add(obj)
+                                    postsList.add(0, obj)
                                 }
                             }
                         }
@@ -121,28 +123,28 @@ class PostingActivity : AppCompatActivity() {
                             if (obj != null) {
                                 if (category1 == "전체 지역") {
                                     if (auth == "[인증]" && obj.auth == auth) {
-                                        postsList.add(obj)
+                                        postsList.add(0, obj)
                                     } else if (auth == "[일반]" && obj.auth == auth) {
-                                        postsList.add(obj)
+                                        postsList.add(0, obj)
                                     } else if(auth==""){
-                                        postsList.add(obj)
+                                        postsList.add(0, obj)
                                     }
                                 } else if (obj.area1.equals(category1)) {
                                     if (category2 == "전체 지역") {
                                         if (auth == "[인증]" && obj.auth == auth) {
-                                            postsList.add(obj)
+                                            postsList.add(0, obj)
                                         } else if (auth == "[일반]" && obj.auth == auth) {
-                                            postsList.add(obj)
+                                            postsList.add(0, obj)
                                         } else if(auth==""){
-                                            postsList.add(obj)
+                                            postsList.add(0, obj)
                                         }
                                     } else if (category2 == obj.area2) {
                                         if (auth == "[인증]" && obj.auth == auth) {
-                                            postsList.add(obj)
+                                            postsList.add(0, obj)
                                         } else if (auth == "[일반]" && obj.auth == auth) {
-                                            postsList.add(obj)
+                                            postsList.add(0, obj)
                                         } else if(auth==""){
-                                            postsList.add(obj)
+                                            postsList.add(0, obj)
                                         }
                                     }
                                 }

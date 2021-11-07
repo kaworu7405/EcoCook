@@ -230,9 +230,19 @@ class MainMenuActivity : AppCompatActivity(), View.OnClickListener {
 
                     //사용자가 recipe를 좋아요해서 좋아요한 레시피를 추가한다면
                     if (obj != null) {
-                        obj.myRecipes?.add("간장파스타]https://www.10000recipe.com/recipe/6762181")
-                        docRef.set(obj)
+                        if (obj.myRecipes==null) {
+                            var arr=ArrayList<String>()
+                            arr.add("간장파스타]https://www.10000recipe.com/recipe/6762181")
+                            obj.myRecipes=arr
+                            docRef.set(obj)
+                        }
+                        else{
+                            obj.myRecipes!!.add("간장파스타]https://www.10000recipe.com/recipe/6762181")
+                            docRef.set(obj)
+                        }
                     }
+
+
                 }
             }
         }
