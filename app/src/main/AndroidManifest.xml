@@ -32,6 +32,12 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
         <activity
+            android:name=".manage_fridge.DetailList"
+            android:exported="true" />
+        <activity
+            android:name=".manage_fridge.DetailLook"
+            android:exported="true" />
+        <activity
             android:name=".manage_fridge.RemoveIngredient"
             android:exported="true" />
         <activity
