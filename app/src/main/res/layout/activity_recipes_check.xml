@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".manage_fridge.RemoveIngredient">
-
+    tools:context=".manage_fridge.RecipesCheck">
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="409dp"
@@ -19,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
-            android:id="@+id/select_btn"
+            android:id="@+id/recipes_cancel_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
@@ -27,12 +26,12 @@
             android:text="선택취소" />
 
         <Button
-            android:id="@+id/select_remove_btn"
+            android:id="@+id/recipes_check_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="140dp"
             android:layout_marginTop="30dp"
-            android:text="삭제" />
+            android:text="레시피 확인" />
     </LinearLayout>
 
     <ScrollView

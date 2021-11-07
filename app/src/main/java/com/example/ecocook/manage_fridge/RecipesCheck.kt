@@ -6,7 +6,6 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.*
@@ -21,60 +20,31 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.activity_my_fridge.*
+import kotlinx.android.synthetic.main.activity_recipes_check.*
 import kotlinx.android.synthetic.main.activity_remove_ingredient.*
+import kotlinx.android.synthetic.main.activity_remove_ingredient.table2
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class RemoveIngredient : AppCompatActivity() {
+class RecipesCheck : AppCompatActivity() {
     var ingredient = 0      //총 재료
     var icount = 0      //현재 만들어진 재료
     var lcount = 0      //현재 만들어진 줄 개수
-    var check_array=ArrayList<Boolean>()
+    var ingredient_array=ArrayList<String>()
     val user = Firebase.auth.currentUser
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_remove_ingredient)
-        select_btn.setOnClickListener(View.OnClickListener {            //취소하면 그냥 돌아감
+        setContentView(R.layout.activity_recipes_check)
+        recipes_cancel_btn.setOnClickListener(View.OnClickListener {
             startActivity(Intent(this, MyFridge::class.java))
             finish()
         })
-        select_remove_btn.setOnClickListener(View.OnClickListener {     //삭제 버튼
-            val db = Firebase.firestore
-            val f = db.collection(user?.uid.toString())
-            for(i in 0..icount-1){
-                if(check_array[i]==true){
-                    System.out.println(i)
-                    val deleteId=i+1 //여기에 삭제시킬 id 입력하시면 됩니다!
-                    f.orderBy("id").get()
-                        .addOnSuccessListener { result ->
-                            var foodNum=result.size()-1
-                            for(food in result){
-                                val obj = food.toObject<UserFridge>()
-                                if (obj != null && obj.id > deleteId) {
-                                    val newObjId=obj.id-1
-                                    obj.id = newObjId
-                                    f.document(newObjId.toString()).set(obj)
-                                    if(foodNum==obj.id){
-                                        f.document((obj.id+1).toString()).delete()
-                                        ingredient-=1
-                                        Log.d("TAG", "성공입니다!!")
-                                    }
-                                }
-                            }
-                            if(deleteId==result.size()){
-                                f.document(deleteId.toString()).delete()
-                                Log.d("TAG", "성공입니다!!")
-                            }
-                        }
-                        .addOnFailureListener { exception ->
-                        }
-                }
-            }
 
-            var pref = getSharedPreferences("pref",Context.MODE_PRIVATE)   //앱종료되도 값 유지
-            pref.edit().putInt("ingredient",ingredient).apply()         //ingredient값 저장
-            startActivity(Intent(this, MyFridge::class.java))
+        recipes_check_btn.setOnClickListener(View.OnClickListener {
+            val nextIntent = Intent(this, RecipesResult::class.java)
+            nextIntent.putExtra("ingredient_array",ingredient_array)    //ingredient_array 값 전달
+            startActivity(nextIntent)
             finish()
         })
     }
@@ -149,7 +119,7 @@ class RemoveIngredient : AppCompatActivity() {
             changeDP(60)
         )
         findViewById<LinearLayout>(62000+icount).addView(img)
-        setimg(img,cate)               //이미지넣기
+        setimg(img,cate)  //이미지넣기
         val textname = TextView(this)           //재료이름
         textname.text = a
         textname.gravity= Gravity.CENTER
@@ -179,10 +149,14 @@ class RemoveIngredient : AppCompatActivity() {
             changeDP(30), changeDP(30)
         )
         checkbox.id=(67000+icount)
-        check_array.add(false)                  //기본은 체크가 안되있는 상태
+        ingredient_array.add("")                  //기본은 체크가 안되있는 상태
         findViewById<LinearLayout>(63000+icount).addView(checkbox)
         checkbox.setOnCheckedChangeListener { buttonView, a ->  //a는 checkbox.isChecked로 체크되있는지 안되있는지 true,false로 알려줌
-            check_array[checkbox.id-67000]=a   //인덱스 0부터 체크됐는지 저장
+            if(a==true){
+                ingredient_array[checkbox.id-67000]=textname.text.toString()
+            }
+            else
+                ingredient_array[checkbox.id-67000]=""   //인덱스 0부터 체크됐는지 저장
         }
 
     }
@@ -214,6 +188,18 @@ class RemoveIngredient : AppCompatActivity() {
             "음료"->img.setImageResource(R.drawable.ingredient7)
             "정육/계란"->img.setImageResource(R.drawable.ingredient8)
             "채소"->img.setImageResource(R.drawable.ingredient9)
+        }
+    }
+    fun getFireBaseProfileImage(category:String,img:ImageView){ //profile 사진을 ImageView에 설정해주는 함수
+        if (this.isFinishing()) //activity destroyed error 방지
+            return
+        var fileName=category.replace('/',',')+".png" //채소 아이콘 이미지를 가져오려면 "채소.png"가 되도록
+
+        val storageRef=Firebase.storage.reference.child("icon_img/"+fileName)
+        storageRef.downloadUrl.addOnSuccessListener { uri->
+            Glide.with(this).load(uri).error(R.drawable.testaa).into(img)
+        }.addOnFailureListener {
+            // Handle any errors
         }
     }
 }
