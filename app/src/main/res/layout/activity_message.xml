@@ -13,7 +13,8 @@
         <ListView
             android:id="@+id/messageLogList"
             android:layout_width="match_parent"
-            android:layout_height="553dp">
+            android:layout_height="516dp"
+            android:stackFromBottom="true">
 
         </ListView>
 
@@ -27,7 +28,8 @@
                 android:layout_width="349dp"
                 android:layout_height="match_parent"
                 android:ems="10"
-                android:inputType="textMultiLine|textPersonName" />
+                android:inputType="textMultiLine|textPersonName"
+                android:scrollbars="vertical" />
 
             <Button
                 android:id="@+id/messageSendBtn"
