@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.ecocook">
-
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -19,7 +18,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.EcoCook">
-
+        <activity
+            android:name=".manage_fridge.RecipesResult2"
+            android:exported="true" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -31,6 +32,7 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
         <activity
             android:name=".manage_fridge.DetailList"
             android:exported="true" />
@@ -55,20 +57,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignUpActivity"></activity>
-        <activity android:name=".LoginActivity"></activity>
-        <activity android:name=".MemberInitActivity"></activity>
-        <activity android:name=".passwordResetActivity"></activity>
-        <activity android:name=".MyPageActivity"></activity>>
-        <activity android:name=".ChangeProfileActivity"></activity>>
-        <activity android:name=".PostingActivity"></activity>>
-        <activity android:name=".PostingDetailActivity"></activity>>
-        <activity android:name=".writePostingActivity"></activity>>
+        <activity android:name=".SignUpActivity" />
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".MemberInitActivity" />
+        <activity android:name=".passwordResetActivity" />
+        <activity android:name=".MyPageActivity" />
+        <activity android:name=".ChangeProfileActivity" />
+        <activity android:name=".PostingActivity" />
+        <activity android:name=".PostingDetailActivity" />
+        <activity android:name=".writePostingActivity" />
+        <activity android:name=".RecipesSearch" />
         <activity android:name=".functionActivity" />
         <activity android:name=".AuthLocationActivity" />
         <activity android:name=".MyPostingActivity" />
         <activity android:name=".MyCommentActivity" />
         <activity android:name=".MyMessageActivity" />
         <activity android:name=".MessageActivity" />
+        <activity android:name=".MyRecipes" />
     </application>
+
 </manifest>

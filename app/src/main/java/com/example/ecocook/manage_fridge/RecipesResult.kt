@@ -66,8 +66,7 @@ class RecipesResult : AppCompatActivity() {
             }
     }
     override fun onBackPressed() {
-        //startActivity(Intent(this, MyFridge::class.java))
-        startActivity(Intent(this, MyRecipes::class.java))
+        startActivity(Intent(this, MyFridge::class.java))
         finish()
     }
     fun AddLinear(){        //한 줄 추가
