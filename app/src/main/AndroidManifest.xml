@@ -55,15 +55,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".MemberInitActivity" />
-        <activity android:name=".passwordResetActivity" />
-        <activity android:name=".MyPageActivity" />
-        <activity android:name=".ChangeProfileActivity" />
-        <activity android:name=".PostingActivity" />
-        <activity android:name=".PostingDetailActivity" />
-        <activity android:name=".writePostingActivity" />
+        <activity android:name=".SignUpActivity"></activity>
+        <activity android:name=".LoginActivity"></activity>
+        <activity android:name=".MemberInitActivity"></activity>
+        <activity android:name=".passwordResetActivity"></activity>
+        <activity android:name=".MyPageActivity"></activity>>
+        <activity android:name=".ChangeProfileActivity"></activity>>
+        <activity android:name=".PostingActivity"></activity>>
+        <activity android:name=".PostingDetailActivity"></activity>>
+        <activity android:name=".writePostingActivity"></activity>>
         <activity android:name=".functionActivity" />
         <activity android:name=".AuthLocationActivity" />
         <activity android:name=".MyPostingActivity" />

@@ -10,7 +10,6 @@ import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.*
-import com.bumptech.glide.Glide
 import com.example.ecocook.R
 import com.example.ecocook.UserFridge
 import com.google.firebase.auth.ktx.auth
@@ -19,12 +18,8 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.activity_my_fridge.*
 import kotlinx.android.synthetic.main.activity_remove_ingredient.*
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
 
 class RemoveIngredient : AppCompatActivity() {
     var ingredient = 0      //총 재료
@@ -43,33 +38,17 @@ class RemoveIngredient : AppCompatActivity() {
             val db = Firebase.firestore
             val f = db.collection(user?.uid.toString())
             for(i in 0..icount-1){
-                if(check_array[i]==true){
-                    System.out.println(i)
-                    val deleteId=i+1 //여기에 삭제시킬 id 입력하시면 됩니다!
-                    f.orderBy("id").get()
-                        .addOnSuccessListener { result ->
-                            var foodNum=result.size()-1
-                            for(food in result){
-                                val obj = food.toObject<UserFridge>()
-                                if (obj != null && obj.id > deleteId) {
-                                    val newObjId=obj.id-1
-                                    obj.id = newObjId
-                                    f.document(newObjId.toString()).set(obj)
-                                    if(foodNum==obj.id){
-                                        f.document((obj.id+1).toString()).delete()
-                                        ingredient-=1
-                                        Log.d("TAG", "성공입니다!!")
-                                    }
-                                }
-                            }
-                            if(deleteId==result.size()){
-                                f.document(deleteId.toString()).delete()
-                                Log.d("TAG", "성공입니다!!")
-                            }
+                if(check_array[i]==true)
+                    if (f != null) {
+                        f.document((i+1).toString()).delete().addOnSuccessListener{
+                            //삭제가 잘 된 경우 코드
+                            Log.d("TAG", "DocumentSnapshot successfully deleted!")
+                            ingredient-=1
+                        }.addOnFailureListener{
+                            //삭제가 안 된 경우 코드
+                                e -> Log.w("TAG", "Error deleting document", e)
                         }
-                        .addOnFailureListener { exception ->
-                        }
-                }
+                    }
             }
 
             var pref = getSharedPreferences("pref",Context.MODE_PRIVATE)   //앱종료되도 값 유지
@@ -100,12 +79,21 @@ class RemoveIngredient : AppCompatActivity() {
                             lcount+=1
                         }
                         AddLinear()
-                        AddIngredient(obj.name.toString(),obj.category.toString(),obj.expiryDate.toString())
+                        AddIngredient(obj.name.toString(),obj.expiryDate.toString())
                         icount+=1
                     }
                 }
             }
-        }
+        }/*
+        for(i in 0..ingredient-1){      //ingredient값만큼 재료가 있므르로 재료들 보여주기 0부터로 해서 ingredient-1
+            if(icount==lcount*3){       //한 줄에 3개씩 보여주기 위함
+                AddTablerow()           //tablerow 생성
+                lcount+=1               //어디까지 생성했는지 체크
+            }
+            AddLinear()                 //linearlayout생성
+            AddIngredient()             //재료그림, 이름, 유통기한, 체크박스 생성
+            icount+=1                   //어디까지 생성했는지 체크
+        }*/
     }
     fun AddTablerow(){        //한 줄 추가
         val LL= TableRow(this)
@@ -135,13 +123,15 @@ class RemoveIngredient : AppCompatActivity() {
         val LL3= LinearLayout(this)     //한 음식재료를 보여주는 layout공간에서 재료와 체크박스를 나누기 위한 공간(체크박스부분)
         LL3.setBackgroundColor(Color.GREEN)
         LL3.id=(63000+icount)
+        LL3.gravity= Gravity.CENTER
         findViewById<LinearLayout>(61000+icount).addView(LL3,
             LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT)
 
     }
     @SuppressLint("ResourceType")   //이건 뭔지 잘 모르겠다, id=(int값)할 때 뜨는 에러때문에 추가
-    fun AddIngredient(a : String,cate:String, b : String){    //재료 추가
+    fun AddIngredient(a : String, b : String){    //재료 추가
         val img= ImageView(this)            //이미지
+        img.setImageResource(R.drawable.testaa)
         img.scaleType= ImageView.ScaleType.CENTER_CROP      //scaleType을 center_crop으로
         img.id=(64000+icount)
         img.layoutParams = LinearLayout.LayoutParams(
@@ -149,7 +139,7 @@ class RemoveIngredient : AppCompatActivity() {
             changeDP(60)
         )
         findViewById<LinearLayout>(62000+icount).addView(img)
-        setimg(img,cate)               //이미지넣기
+
         val textname = TextView(this)           //재료이름
         textname.text = a
         textname.gravity= Gravity.CENTER
@@ -162,7 +152,7 @@ class RemoveIngredient : AppCompatActivity() {
         findViewById<LinearLayout>(62000+icount).addView(textname)
 
         val textdate = TextView(this)       //유통기한
-        textdate.text = "D-"+calculateDday(b).toString()
+        textdate.text = b
         textdate.gravity= Gravity.CENTER
         textdate.layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -191,29 +181,5 @@ class RemoveIngredient : AppCompatActivity() {
         var dp = Math.round(value * displayMetrics.density)
         return dp
     }
-    fun calculateDday(date : String): Long {   //D-day계산
-        //val today = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("yyyyMMdd")
-        val endDate = dateFormat.parse(date).time
-        val today = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-        }.time.time
-        return (endDate - today -1) / (24 * 60 * 60 * 1000)
-    }
-    fun setimg(img : ImageView,cate:String){
-        when(cate){
-            "과일"->img.setImageResource(R.drawable.ingredient2)
-            "견과"->img.setImageResource(R.drawable.ingredient1)
-            "기타"->img.setImageResource(R.drawable.ingredient3)
-            "김치/반찬"->img.setImageResource(R.drawable.ingredient4)
-            "쌀/곡물"->img.setImageResource(R.drawable.ingredient5)
-            "유제품"->img.setImageResource(R.drawable.ingredient6)
-            "음료"->img.setImageResource(R.drawable.ingredient7)
-            "정육/계란"->img.setImageResource(R.drawable.ingredient8)
-            "채소"->img.setImageResource(R.drawable.ingredient9)
-        }
-    }
+
 }

@@ -25,21 +25,21 @@
             android:textSize="25dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="5dp"
-            android:layout_marginLeft="25dp"
+            android:layout_marginLeft="10dp"
             />
         <TextView
             android:id="@+id/check_i3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Name"
-            android:layout_marginLeft="25dp"
+            android:layout_marginLeft="10dp"
             />
         <TextView
             android:id="@+id/check_i4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Name"
-            android:layout_marginLeft="25dp"
+            android:layout_marginLeft="10dp"
             />
 
         <TextView
@@ -47,7 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Name"
-            android:layout_marginLeft="25dp"
+            android:layout_marginLeft="10dp"
             />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
