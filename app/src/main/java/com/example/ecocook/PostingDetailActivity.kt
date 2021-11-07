@@ -28,29 +28,37 @@ class PostingDetailActivity : AppCompatActivity() {
 
         val postingInfo = intent.getSerializableExtra("postingInfo") as Posting
         val user = Firebase.auth.currentUser
+
         commentInputBtn.setOnClickListener {
             var arr = ArrayList<Map<String, String>>()
-            var comments = postingInfo.comments
-            if (comments != null) {
-                for (comment in comments) {
-                    arr.add(comment)
-                }
-            }
-
-            if (user != null) {
-                arr.add(mapOf(user.uid.toString() to commentInputText.text.toString()))
-            }
-
-            postingInfo.comments = arr
-
-            val docRef =
+            val db =
                 Firebase.firestore.collection("Posting").document(postingInfo.id.toString())
-            docRef.set(postingInfo)
+            db.get().addOnSuccessListener{document->
+                val obj=document.toObject<Posting>()
+                var comments= obj?.comments
+                if (comments != null) {
+                    for (comment in comments) {
+                        arr.add(comment)
+                    }
+                }
 
-            val commentAdapter = CommentsAdapter(this, R.layout.comment_view, arr)
-            commentListView.adapter = commentAdapter
+                if (user != null) {
+                    arr.add(mapOf(user.uid.toString() to commentInputText.text.toString()))
+                }
 
-            commentInputText.setText("")
+                postingInfo.comments = arr
+
+                val docRef =
+                    Firebase.firestore.collection("Posting").document(postingInfo.id.toString())
+                docRef.set(postingInfo)
+
+                val commentAdapter = CommentsAdapter(this, R.layout.comment_view, arr)
+                commentListView.adapter = commentAdapter
+
+                commentInputText.setText("")
+            }
+
+
         }
 
         revisePostingBtn.setOnClickListener {
@@ -92,6 +100,7 @@ class PostingDetailActivity : AppCompatActivity() {
         messageButton.setOnClickListener {
             var alreadyHas=false
             var resultNum:Int
+
             db.collection("Message").get().addOnSuccessListener { result ->
                 if (result != null) {
                     resultNum=result.size()
@@ -124,7 +133,7 @@ class PostingDetailActivity : AppCompatActivity() {
                     }
                     if(!alreadyHas){
                         var fileName=(resultNum+1).toString()
-                        var m = Message(null, user?.uid, postingInfo.userId)
+                        var m = Message(fileName,null, user?.uid, postingInfo.userId)
                         db.collection("Message").document(fileName).set(m)
 
                         val myIntent = Intent(this, MessageActivity::class.java)
@@ -164,6 +173,7 @@ class PostingDetailActivity : AppCompatActivity() {
         } else {
             areaText.text = "전체 지역"
         }
+
         val docRef = Firebase.firestore.collection("users").document(postingInfo.userId.toString())
         docRef.get()
             .addOnSuccessListener { document ->

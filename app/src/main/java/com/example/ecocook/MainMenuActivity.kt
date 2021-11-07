@@ -60,6 +60,10 @@ class MainMenuActivity : AppCompatActivity(), View.OnClickListener {
 
         }
 
+        RecommendRecipeButton.setOnClickListener{ //추천 레시피 가기 버튼
+            //startActivity(Intent(this, ::class.java)) //추천레시피 Activity 두번째 인자에 추가하시면됩니다!
+        }
+
         //레시피 DB TEST할 수 있는 버튼!
         //DB에 저장되어있는 레시피를 꺼내올 수 있음
         DbTestButton.setOnClickListener {
