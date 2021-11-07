@@ -37,8 +37,10 @@ class MyPageActivity: AppCompatActivity() {
             .addOnFailureListener { exception ->
                 //Log.d(TAG, "get failed with ", exception)
             }
-
-
+        button6.setOnClickListener{     //나의 관심 레시피
+            startActivity(Intent(this, MyRecipes::class.java))
+            finish()
+        }
         ProfileEditButton.setOnClickListener{
             startActivity(Intent(this, ChangeProfileActivity::class.java))
         }
