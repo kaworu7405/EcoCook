@@ -88,7 +88,6 @@ class MainMenuActivity : AppCompatActivity(), View.OnClickListener {
 
     fun manageFridge() {             //냉장고 관리로 넘어감
         startActivity(Intent(this, MyFridge::class.java))
-        finish()
     }
 
     override fun onClick(v: View?) {
