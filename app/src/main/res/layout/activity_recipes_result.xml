@@ -30,10 +30,12 @@
         android:orientation="horizontal"
         android:layout_marginTop="15dp">
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="감자, 토마토\n레시피 결과"
-            android:textSize="35dp"
+            android:id="@+id/result_title"
+            android:layout_width="290dp"
+            android:layout_height="110dp"
+            android:text="레시피 결과"
+            android:gravity="center"
+            android:textSize="28dp"
             />
     </LinearLayout>
 
