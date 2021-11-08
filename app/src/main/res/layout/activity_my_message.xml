@@ -8,10 +8,22 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/textView18"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="0"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/edit_round"
+            android:gravity="center"
+            android:text="쪽지" />
+
         <ListView
             android:id="@+id/myMessageListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
             android:choiceMode="singleChoice" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
