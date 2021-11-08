@@ -45,6 +45,11 @@ class ChangeProfileActivity: AppCompatActivity() {
 
                         str = document.getData()?.get("address").toString()
                         EditUserAddress.setText(str)
+
+                        if(document.getData()?.get("hasImage").toString()=="true")
+                        {
+                            getFireBaseProfileImage() //프로필이미지 설정
+                        }
                     }
                 } else {
                     finish()
@@ -67,7 +72,8 @@ class ChangeProfileActivity: AppCompatActivity() {
             openGallery()
         }
 
-        getFireBaseProfileImage() //프로필이미지 설정
+
+
     }
     fun openGallery(){
         val intent=Intent(Intent.ACTION_PICK)

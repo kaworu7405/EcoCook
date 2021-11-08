@@ -63,6 +63,7 @@ class MessageActivity : AppCompatActivity() {
                                 }
                                 if (user != null) {
                                     arr.add(mapOf(user.uid to chattingInputText.text.toString()))
+                                    chattingInputText.setText("")
                                 }
                                 if (obj != null) {
                                     obj.message = arr
@@ -72,7 +73,6 @@ class MessageActivity : AppCompatActivity() {
                             }
                         }
                     }
-                chattingInputText.setText("")
             }
         }
     }

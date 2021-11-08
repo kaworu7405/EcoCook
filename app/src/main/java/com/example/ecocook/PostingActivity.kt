@@ -35,7 +35,15 @@ class PostingActivity : AppCompatActivity() {
         setPosting("전체 지역", "전체 지역", "")
         setAreaList()
         postingBtn.setOnClickListener {
-            startActivity(Intent(this, writePostingActivity::class.java))
+            /*
+            val myIntent = Intent(this, PostingDetailActivity::class.java)
+            myIntent.putExtra("postingInfo", clickedPosting)
+            startActivity(myIntent)
+             */
+            var isNew=true
+            val myIntent = Intent(this, writePostingActivity::class.java)
+            myIntent.putExtra("isNew", isNew)
+            startActivity(myIntent)
         }
 
         findBtn.setOnClickListener {

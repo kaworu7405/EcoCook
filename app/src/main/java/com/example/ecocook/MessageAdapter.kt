@@ -51,13 +51,15 @@ class MessageAdapter(
                 val str=document.get("name").toString()+"님과의 채팅입니다."
                 explainText.setText(str)
 
-                var fileName = "profile_" + anotherUserId + ".jpg"
+                if(document.get("hasImage").toString()=="true") {
+                    var fileName = "profile_" + anotherUserId + ".jpg"
 
-                val storageRef = Firebase.storage.reference.child("profile_img/" + fileName)
-                storageRef.downloadUrl.addOnSuccessListener { uri ->
-                    Glide.with(mContext).load(uri).into(anotherUserImageView)
-                }.addOnFailureListener {
-                    // Handle any errors
+                    val storageRef = Firebase.storage.reference.child("profile_img/" + fileName)
+                    storageRef.downloadUrl.addOnSuccessListener { uri ->
+                        Glide.with(mContext).load(uri).into(anotherUserImageView)
+                    }.addOnFailureListener {
+                        // Handle any errors
+                    }
                 }
             }
         return row

@@ -6,5 +6,6 @@ data class MemberInfo(
     val birthDay:String?=null,
     var address:String?=null,
     var myRecipes: ArrayList<String>?=null,
-    var auth : String?=null
+    var auth : String?=null,
+    val hasImage : String?=null
 )

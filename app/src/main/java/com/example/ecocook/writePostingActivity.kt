@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.*
@@ -26,12 +27,13 @@ class writePostingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_write_posting)
 
+        val isNew=intent.getSerializableExtra("isNew") as Boolean
 
-        val postingInfo=intent.getSerializableExtra("postingInfo") as Posting
         setAreaSpinner1()
         setBuyDateSpinner()
         setExpiryDateSpinner()
-        if(postingInfo!=null){
+        if(!isNew){
+            val postingInfo=intent.getSerializableExtra("postingInfo") as Posting
             initForRevising(postingInfo)
             isRevise=true
         }
@@ -51,6 +53,13 @@ class writePostingActivity : AppCompatActivity() {
             myIntent.putExtra("postingInfo", obj)
             startActivity(myIntent)
             finish()
+        }
+
+        val user = Firebase.auth.currentUser
+        val docRef = user?.let { Firebase.firestore.collection("users").document(it.uid) }
+        docRef?.get()?.addOnSuccessListener{ document->
+            obj.auth= document.get("auth").toString()
+            Log.d("TAG", obj.auth.toString())
         }
 
     }
@@ -133,6 +142,7 @@ class writePostingActivity : AppCompatActivity() {
 
         val user = Firebase.auth.currentUser
         val db = Firebase.firestore
+        
         val f = db.collection("Posting").orderBy("id").get().addOnSuccessListener { result ->
             val postingNum = result.size() + 1
             if (user != null) {
@@ -146,11 +156,6 @@ class writePostingActivity : AppCompatActivity() {
                     obj.id = postingNum.toString()
                     obj.comments = null
                 }
-                val docRef = Firebase.firestore.collection("users").document(user.uid)
-                docRef.get()
-                    .addOnSuccessListener{document->
-                        obj.auth= document.get("auth").toString()
-                    }
 
                 var fileName = "posting_" + obj.id + ".jpg"
                 obj.imgUrl=("posting_img/" + fileName)
@@ -159,6 +164,7 @@ class writePostingActivity : AppCompatActivity() {
                     var uploadTask = storageRef.putFile(imageUrl!!)
                 }
                 db.collection("Posting").document(obj.id.toString()).set(obj)
+                Log.d("TAG", "끝")
 
                 val myIntent = Intent(this, PostingDetailActivity::class.java)
                 myIntent.putExtra("postingInfo", obj)
