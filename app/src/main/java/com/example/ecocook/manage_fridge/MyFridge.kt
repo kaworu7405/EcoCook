@@ -74,49 +74,47 @@ class MyFridge : AppCompatActivity() {
             var pref = getSharedPreferences("pref",Context.MODE_PRIVATE)
             ingredient = pref.getInt("ingredient",0)    //ingredient가져오기 값없으면 0을 가져옴
             sortindex = pref.getInt("sortindex",0)
-            if(icount<ingredient){      //삭제후 추가생성방지
-                setspinner()
-                if (querySnapshot != null) {
-                    // 반복문으로 모든 음식에 접근합니다.(document가 음식)
-                    // UserFridge.kt에 각 필드 설명 적혀있습니다!
-                    for (document in querySnapshot.documents) {
-                        val obj = document.toObject<UserFridge>()
-                        if (obj != null) {
-                            objlist.add(obj)    //정렬
-                        }
+            setspinner()
+            if (querySnapshot != null) {
+                // 반복문으로 모든 음식에 접근합니다.(document가 음식)
+                // UserFridge.kt에 각 필드 설명 적혀있습니다!
+                for (document in querySnapshot.documents) {
+                    val obj = document.toObject<UserFridge>()
+                    if (obj != null) {
+                        objlist.add(obj)    //정렬
                     }
-                    if(sortindex==0){
-                        for(obj in objlist){
-                            if(icount==lcount*4){
-                                AddTablerow()
-                                lcount+=1
-                            }
-                            AddLinear(obj)
-                            AddIngredient(obj.name.toString(),obj.category.toString(),obj.expiryDate.toString())
-                            icount+=1
+                }
+                if(sortindex==0){
+                    for(obj in objlist){
+                        if(icount==lcount*4){
+                            AddTablerow()
+                            lcount+=1
                         }
+                        AddLinear(obj)
+                        AddIngredient(obj.name.toString(),obj.category.toString(),obj.expiryDate.toString())
+                        icount+=1
                     }
-                    else if(sortindex==1){
-                        for(obj in objlist.sortedWith(compareBy ({ it.name },{ it.expiryDate}))){
-                            if(icount==lcount*4){
-                                AddTablerow()
-                                lcount+=1
-                            }
-                            AddLinear(obj)
-                            AddIngredient(obj.name.toString(),obj.category.toString(),obj.expiryDate.toString())
-                            icount+=1
+                }
+                else if(sortindex==1){
+                    for(obj in objlist.sortedWith(compareBy ({ it.name },{ it.expiryDate}))){
+                        if(icount==lcount*4){
+                            AddTablerow()
+                            lcount+=1
                         }
+                        AddLinear(obj)
+                        AddIngredient(obj.name.toString(),obj.category.toString(),obj.expiryDate.toString())
+                        icount+=1
                     }
-                    else if(sortindex==2){
-                        for(obj in objlist.sortedWith(compareBy ({ it.expiryDate },{ it.name}))){
-                            if(icount==lcount*4){
-                                AddTablerow()
-                                lcount+=1
-                            }
-                            AddLinear(obj)
-                            AddIngredient(obj.name.toString(),obj.category.toString(),obj.expiryDate.toString())
-                            icount+=1
+                }
+                else if(sortindex==2){
+                    for(obj in objlist.sortedWith(compareBy ({ it.expiryDate },{ it.name}))){
+                        if(icount==lcount*4){
+                            AddTablerow()
+                            lcount+=1
                         }
+                        AddLinear(obj)
+                        AddIngredient(obj.name.toString(),obj.category.toString(),obj.expiryDate.toString())
+                        icount+=1
                     }
                 }
             }
