@@ -21,7 +21,6 @@ class AddIngredient : AppCompatActivity() {
     val y=Array(140,{i->i+2000})
     val m=Array(12,{i->i+1})
     val d=Array(31,{i->i+1})
-    val amountnum=Array(130,{i->i+1})
     var add_data = AddIngredientData()
     val user = Firebase.auth.currentUser
 
@@ -115,17 +114,11 @@ class AddIngredient : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
         }
-        amount.adapter=ArrayAdapter(this,R.layout.support_simple_spinner_dropdown_item,amountnum)     //유통기한일
-        amount.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                add_data.var_amountnum= amountnum[position].toString()
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-        }
+
     }
     fun ingredientsave(){
         add_data.ingredientname=ingredient_name.text.toString()
+        add_data.var_amountnum=amount.text.toString()
         var category = add_data.kind
         var name = add_data.ingredientname
         var iconId : String? = null //제가 이후에 음식 종류에 따른 이미지 url가르쳐드릴테니 야채인지 과일인지에 따라 그 url을 여기에 넣어주시면 됩니다!

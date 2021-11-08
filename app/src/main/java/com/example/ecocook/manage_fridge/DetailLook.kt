@@ -25,6 +25,7 @@ import java.util.*
 class DetailLook : AppCompatActivity() {
     var detailindex=0
     var detailname=""
+    var detailnum=""
     val user = Firebase.auth.currentUser
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +45,7 @@ class DetailLook : AppCompatActivity() {
                     val obj = document.toObject<UserFridge>()
                     if (obj != null && obj.id==detailindex) {
                         detailname=obj.name.toString()
+                        detailnum=obj.num.toString()
                         setimg(detailimg,obj.category.toString())
                         detailtext.text=obj.name
                         val dday=calculateDday(obj.expiryDate.toString())
@@ -67,6 +69,7 @@ class DetailLook : AppCompatActivity() {
             val nextIntent = Intent(this, EditIngredient::class.java)
             nextIntent.putExtra("detailindex",detailindex)    //detailindex 값 전달
             nextIntent.putExtra("detailname",detailname)    //detailname 값 전달
+            nextIntent.putExtra("detailnum",detailnum)
             startActivity(nextIntent)
             finish()
         })

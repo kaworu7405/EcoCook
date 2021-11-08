@@ -9,5 +9,5 @@ class AddIngredientData {
     var ey = ""
     var em = ""
     var ed = ""
-    var var_amountnum = ""
+    var var_amountnum = "1"
 }
