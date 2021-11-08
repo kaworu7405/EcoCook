@@ -25,29 +25,33 @@
 
         <Button
             android:id="@+id/LogoutButton"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="30dp"
             android:text="로그아웃" />
 
         <Button
             android:id="@+id/changePasswordBtn"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="30dp"
             android:text="비밀번호 변경" />
 
         <Button
             android:id="@+id/sendEmailButton"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="30dp"
             android:text="오류 신고" />
 
         <Button
             android:id="@+id/button10"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="30dp"
             android:text="이용정책" />
 
