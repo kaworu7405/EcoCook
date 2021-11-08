@@ -28,7 +28,7 @@
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="60dp"
             android:text="로그아웃" />
 
         <Button
@@ -36,7 +36,7 @@
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="60dp"
             android:text="비밀번호 변경" />
 
         <Button
@@ -44,7 +44,7 @@
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="60dp"
             android:text="오류 신고" />
 
         <Button
@@ -52,7 +52,7 @@
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="60dp"
             android:text="이용정책" />
 
     </LinearLayout>

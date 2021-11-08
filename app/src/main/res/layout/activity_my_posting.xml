@@ -10,10 +10,22 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/textView17"
+            android:layout_width="300dp"
+            android:layout_height="42dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="0"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/edit_round"
+            android:gravity="center"
+            android:text="내가 쓴 글" />
+
         <ListView
             android:id="@+id/myPostingList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:stackFromBottom="false" />
 
     </LinearLayout>
