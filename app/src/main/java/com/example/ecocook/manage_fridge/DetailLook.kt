@@ -23,6 +23,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class DetailLook : AppCompatActivity() {
+    var detailindex=0
+    var detailname=""
     val user = Firebase.auth.currentUser
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +33,7 @@ class DetailLook : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         var pref = getSharedPreferences("pref", Context.MODE_PRIVATE)
-        var detailindex = pref.getInt("detailindex",0)    //ingredient가져오기 값없으면 0을 가져옴
+        detailindex = pref.getInt("detailindex",0)    //ingredient가져오기 값없으면 0을 가져옴
         val db = Firebase.firestore
         val f = db.collection(user?.uid.toString())
         f.addSnapshotListener { querySnapshot: QuerySnapshot?, _: FirebaseFirestoreException? ->
@@ -41,6 +43,7 @@ class DetailLook : AppCompatActivity() {
                 for (document in querySnapshot.documents) {
                     val obj = document.toObject<UserFridge>()
                     if (obj != null && obj.id==detailindex) {
+                        detailname=obj.name.toString()
                         setimg(detailimg,obj.category.toString())
                         detailtext.text=obj.name
                         detailtext1.text="D-"+calculateDday(obj.expiryDate.toString())
@@ -57,8 +60,11 @@ class DetailLook : AppCompatActivity() {
             finish()
         })
         editbtn.setOnClickListener(View.OnClickListener {
-            //startActivity(Intent(this, RecipesCheck::class.java))
-            //finish()
+            val nextIntent = Intent(this, EditIngredient::class.java)
+            nextIntent.putExtra("detailindex",detailindex)    //detailindex 값 전달
+            nextIntent.putExtra("detailname",detailname)    //detailname 값 전달
+            startActivity(nextIntent)
+            finish()
         })
     }
     override fun onBackPressed() {

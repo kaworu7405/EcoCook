@@ -88,7 +88,7 @@ class MyFridge : AppCompatActivity() {
                             AddTablerow()
                             lcount+=1
                         }
-                        AddLinear()
+                        AddLinear(obj)
                         AddIngredient(obj.name.toString(),obj.category.toString(),obj.expiryDate.toString())
                         icount+=1
                     }
@@ -99,7 +99,7 @@ class MyFridge : AppCompatActivity() {
                             AddTablerow()
                             lcount+=1
                         }
-                        AddLinear()
+                        AddLinear(obj)
                         AddIngredient(obj.name.toString(),obj.category.toString(),obj.expiryDate.toString())
                         icount+=1
                     }
@@ -110,7 +110,7 @@ class MyFridge : AppCompatActivity() {
                             AddTablerow()
                             lcount+=1
                         }
-                        AddLinear()
+                        AddLinear(obj)
                         AddIngredient(obj.name.toString(),obj.category.toString(),obj.expiryDate.toString())
                         icount+=1
                     }
@@ -142,7 +142,7 @@ class MyFridge : AppCompatActivity() {
 
     }
     @SuppressLint("ResourceType")       //이건 뭔지 잘 모르겠다, id=(int값)할 때 뜨는 에러때문에 추가
-    fun AddLinear(){        //한 줄 추가
+    fun AddLinear(obj: UserFridge){        //한 칸 추가
         //val idArray = resources.obtainTypedArray(R.array.id_group_1)      //res에 있는 id.xml 아이디사용  일단은 다른 방법으로 해서 안씀
         //val id = idArray.getResourceId(ingredient,-1)                     //위와 동일
         val LL= LinearLayout(this)
@@ -151,7 +151,7 @@ class MyFridge : AppCompatActivity() {
         LL.gravity=Gravity.CENTER
         LL.orientation=LinearLayout.VERTICAL
         LL.setOnClickListener {
-            detailIngredient(LL.id+1-10000)
+            detailIngredient(obj)
         }
         findViewById<TableRow>(50000+lcount-1).addView(LL,LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
 
@@ -190,7 +190,7 @@ class MyFridge : AppCompatActivity() {
         textdate.id=(40000+icount)
         findViewById<LinearLayout>(10000+icount).addView(textdate)
     }
-    fun setspinner(){
+    fun setspinner(){       //정렬 선택
         fridSpinner.adapter=ArrayAdapter(this,R.layout.support_simple_spinner_dropdown_item,sortlist[sortindex])
         fridSpinner.setSelection(0,false)
         fridSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
@@ -226,7 +226,7 @@ class MyFridge : AppCompatActivity() {
         }.time.time
         return (endDate - today -1) / (24 * 60 * 60 * 1000)
     }
-    fun setimg(img : ImageView,cate:String){
+    fun setimg(img : ImageView,cate:String){        //이미지 넣기
         when(cate){
             "과일"->img.setImageResource(R.drawable.ingredient2)
             "견과"->img.setImageResource(R.drawable.ingredient1)
@@ -239,7 +239,7 @@ class MyFridge : AppCompatActivity() {
             "채소"->img.setImageResource(R.drawable.ingredient9)
         }
     }
-    fun detailIngredient(i : Int){
+    fun detailIngredient(obj : UserFridge){
         val db = Firebase.firestore
         val f = db.collection(user?.uid.toString())
         val builder = AlertDialog.Builder(this)
@@ -250,20 +250,12 @@ class MyFridge : AppCompatActivity() {
         val check_i3 = v1.findViewById<TextView>(R.id.check_i3)
         val check_i4 = v1.findViewById<TextView>(R.id.check_i4)
         val check_i5 = v1.findViewById<TextView>(R.id.check_i5)
-        f.orderBy("id").addSnapshotListener { querySnapshot: QuerySnapshot?, _: FirebaseFirestoreException? ->
-            if (querySnapshot != null) {
-                // 반복문으로 모든 음식에 접근합니다.(document가 음식)
-                for (document in querySnapshot.documents) {
-                    val obj = document.toObject<UserFridge>()
-                    if (obj != null && obj.id==i) {
-                        setimg(check_i1,obj.category.toString())
-                        check_i2.text=obj.name.toString()
-                        check_i3.text="구매일자 "+obj.buyDate.toString()
-                        check_i4.text="유통기한 "+obj.expiryDate.toString()
-                        check_i5.text="잔여수량 "+obj.num.toString()
-                    }
-                }
-            }
+        if (obj != null) {
+            setimg(check_i1,obj.category.toString())
+            check_i2.text=obj.name.toString()
+            check_i3.text="구매일자 "+obj.buyDate.toString()
+            check_i4.text="유통기한 "+obj.expiryDate.toString()
+            check_i5.text="잔여수량 "+obj.num.toString()
         }
         builder.setView(v1)
 

@@ -31,7 +31,6 @@ class DetailList : AppCompatActivity() {
     val sortlist= listOf<List<String>>(sortlist0,sortlist1,sortlist2)
     var sortindex= 0
     val objlist= ArrayList<UserFridge>()
-    var ingredient = 0      //나의 총 재료 개수
     var icount=0            //현재 만들어진 재료
     val user = Firebase.auth.currentUser
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,7 +44,6 @@ class DetailList : AppCompatActivity() {
         val f = db.collection(user?.uid.toString())
         f.addSnapshotListener { querySnapshot: QuerySnapshot?, _: FirebaseFirestoreException? ->
             var pref = getSharedPreferences("pref",Context.MODE_PRIVATE)
-            ingredient = pref.getInt("ingredient",0)    //ingredient가져오기 값없으면 0을 가져옴
             sortindex = pref.getInt("sortindex",0)
             setspinner()
             if (querySnapshot != null) {
@@ -87,11 +85,6 @@ class DetailList : AppCompatActivity() {
     fun Restart() {
         startActivity(Intent(this, DetailList::class.java))
         finish()
-    }
-    override fun onStop() {
-        super.onStop()
-        var pref = getSharedPreferences("pref", Context.MODE_PRIVATE)
-        pref.edit().putInt("ingredient",icount).apply()             //화면종료? 이동시? ingredient저장
     }
     override fun onBackPressed() {
         startActivity(Intent(this, MyFridge::class.java))
@@ -167,7 +160,7 @@ class DetailList : AppCompatActivity() {
         findViewById<LinearLayout>(10000+icount).addView(detailbtn)
         detailbtn.setOnClickListener() {
             var pref = getSharedPreferences("pref", Context.MODE_PRIVATE)
-            pref.edit().putInt("detailindex",detailbtn.id+1-60000).apply()
+            pref.edit().putInt("detailindex",obj.id).apply()
             startActivity(Intent(this, DetailLook::class.java))
             finish()
         }

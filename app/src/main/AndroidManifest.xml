@@ -19,6 +19,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EcoCook">
         <activity
+            android:name=".manage_fridge.EditIngredient"
+            android:exported="true" />
+        <activity
             android:name=".manage_fridge.RecipesResult2"
             android:exported="true" />
         <!--
@@ -74,6 +77,8 @@
         <activity android:name=".MyMessageActivity" />
         <activity android:name=".MessageActivity" />
         <activity android:name=".MyRecipes" />
+        <activity android:name=".manage_fridge.RecipesCheck" />
+        <activity android:name=".manage_fridge.RecipesResult" />
     </application>
 
 </manifest>
