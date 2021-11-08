@@ -25,7 +25,8 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/edit_round"
                 android:gravity="center"
-                android:text="게시글 작성" />
+                android:text="게시글 작성"
+                android:textColor="#FFFFFF" />
 
             <EditText
                 android:id="@+id/postingTitleText"

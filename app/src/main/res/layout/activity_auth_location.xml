@@ -13,10 +13,11 @@
             android:layout_width="300dp"
             android:layout_height="42dp"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/edit_round"
             android:gravity="center"
-            android:text="내 동네 인증" />
+            android:text="내 동네 인증"
+            android:textColor="#FFFFFF" />
 
         <TextView
             android:id="@+id/userLocationText"
