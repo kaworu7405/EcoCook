@@ -133,7 +133,11 @@ class DetailList : AppCompatActivity() {
         findViewById<LinearLayout>(10000+icount).addView(textcategory)
 
         val textdate = TextView(this)           //유통기한 설정
-        textdate.text = "D - "+calculateDday(obj.expiryDate.toString()).toString()
+        val dday=calculateDday(obj.expiryDate.toString())
+        if(dday<0)
+            textdate.text = "D+"+(dday*-1).toString()
+        else
+            textdate.text = "D-"+dday.toString()
         textdate.gravity= Gravity.CENTER                 //gravity설정
         textdate.layoutParams = LinearLayout.LayoutParams(
             changeDP(80), changeDP(50)

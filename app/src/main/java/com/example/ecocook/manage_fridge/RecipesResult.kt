@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.activity_recipes_result.*
 import kotlinx.android.synthetic.main.activity_remove_ingredient.*
 
 class RecipesResult : AppCompatActivity() {
+    var setting =true
     var ingredient = 0      //총 재료
     var rcount = 0      //현재 레시피 수
     var ingredient_array=ArrayList<String>()
@@ -62,16 +63,15 @@ class RecipesResult : AppCompatActivity() {
                         //반복문을 돌려봤자 지금은 간장 파스타만 obj에 저장됩니다.
                         val obj = document.toObject<Recipes>()
                         if (obj != null) {
-                            //category 출력하기(양식인지 중식인지 등..)
-                            obj.category?.let { it1 ->
-                                Log.d("TAG", it1)
-                            }
                             val ms2 = obj.ingredients!!.toSet()                     //레시피 재료 셋
                             if(ms.subtract(ms2).isEmpty()){
-                                Log.d("TAG", obj.name.toString())
+                                if(setting==true){
+                                    resultlayout.setBackgroundColor(Color.parseColor("#330669FF"))
+                                    setting=false
+                                }
                                 AddLinear()
                                 Addresult(obj.name.toString(),obj.recipesUrl.toString())
-
+                                rcount+=1
                             }
                         }
                     }
@@ -84,7 +84,6 @@ class RecipesResult : AppCompatActivity() {
     }
     fun AddLinear(){        //한 줄 추가
         val LL1= LinearLayout(this)      //한 음식재료를 위한 layout공간
-        LL1.setBackgroundColor(Color.BLUE)     //임시 배경색
         LL1.id=(10000+rcount)                   //id부여
         LL1.gravity= Gravity.CENTER             //gravity를 center로
         LL1.orientation= LinearLayout.HORIZONTAL
@@ -113,6 +112,7 @@ class RecipesResult : AppCompatActivity() {
             changeDP(60), changeDP(50)
         )
         youtubebtn.id=(30000+rcount)
+        youtubebtn.setBackgroundResource(R.drawable.youtube)
         findViewById<LinearLayout>(10000+rcount).addView(youtubebtn)
         youtubebtn.setOnClickListener() {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/results?search_query="+a)))
@@ -125,6 +125,7 @@ class RecipesResult : AppCompatActivity() {
             changeDP(60), changeDP(50)
         )
         sitebtn.id=(40000+rcount)
+        sitebtn.setBackgroundResource(R.drawable.recipe)
         findViewById<LinearLayout>(10000+rcount).addView(sitebtn)
         sitebtn.setOnClickListener() {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(b)))
@@ -136,6 +137,7 @@ class RecipesResult : AppCompatActivity() {
             changeDP(60), changeDP(50)
         )
         likebtn.id=(50000+rcount)
+        likebtn.setBackgroundResource(R.drawable.heart)
         findViewById<LinearLayout>(10000+rcount).addView(likebtn)
         likebtn.setOnClickListener() {
             if (user != null) {

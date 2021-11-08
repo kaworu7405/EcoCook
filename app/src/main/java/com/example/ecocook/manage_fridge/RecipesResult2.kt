@@ -19,6 +19,8 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_recipes_result.*
+import kotlinx.android.synthetic.main.activity_recipes_result.result
+import kotlinx.android.synthetic.main.activity_recipes_result2.*
 
 class RecipesResult2 : AppCompatActivity() {
     var rcount = 0      //현재 레시피 수
@@ -38,9 +40,11 @@ class RecipesResult2 : AppCompatActivity() {
             uri_array= intent.getStringArrayListExtra("uri_array")!!
         }
         if(!(recipss_array.isEmpty())){
+            result2layout.setBackgroundColor(Color.parseColor("#330669FF"))
             for(i in 0..recipss_array.size-1){
                 AddLinear()
                 Addresult(recipss_array[i],uri_array[i])
+                rcount+=1
             }
         }
     }
@@ -50,17 +54,15 @@ class RecipesResult2 : AppCompatActivity() {
     }
     fun AddLinear(){        //한 줄 추가
         val LL1= LinearLayout(this)      //한 음식재료를 위한 layout공간
-        LL1.setBackgroundColor(Color.BLUE)     //임시 배경색
         LL1.id=(10000+rcount)                   //id부여
         LL1.gravity= Gravity.CENTER             //gravity를 center로
         LL1.orientation= LinearLayout.HORIZONTAL
-        result.addView(LL1)     //60000+lcount-1의 tablerow에 layout추가
+        result2.addView(LL1)
         //(findViewById<LinearLayout>(10000+rcount).layoutParams as LinearLayout.LayoutParams).setMargins(changeDP(20),changeDP(5),0,0)
         //현재 만든 layout에 마진값 추가
 
     }
     fun Addresult(a : String, b : String){    //재료 추가
-
         val textname = TextView(this)           //재료이름
         textname.text = a                           //글자 알아서 내려감
         textname.gravity= Gravity.CENTER
@@ -79,6 +81,7 @@ class RecipesResult2 : AppCompatActivity() {
             changeDP(60), changeDP(50)
         )
         youtubebtn.id=(30000+rcount)
+        youtubebtn.setBackgroundResource(R.drawable.youtube)
         findViewById<LinearLayout>(10000+rcount).addView(youtubebtn)
         youtubebtn.setOnClickListener() {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/results?search_query="+a)))
@@ -91,6 +94,7 @@ class RecipesResult2 : AppCompatActivity() {
             changeDP(60), changeDP(50)
         )
         sitebtn.id=(40000+rcount)
+        sitebtn.setBackgroundResource(R.drawable.recipe)
         findViewById<LinearLayout>(10000+rcount).addView(sitebtn)
         sitebtn.setOnClickListener() {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(b)))
@@ -102,6 +106,7 @@ class RecipesResult2 : AppCompatActivity() {
             changeDP(60), changeDP(50)
         )
         likebtn.id=(50000+rcount)
+        likebtn.setBackgroundResource(R.drawable.heart)
         findViewById<LinearLayout>(10000+rcount).addView(likebtn)
         likebtn.setOnClickListener() {
             if (user != null) {
