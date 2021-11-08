@@ -22,7 +22,6 @@ import kotlinx.android.synthetic.main.activity_recipes_result.*
 
 class RecipesResult2 : AppCompatActivity() {
     var rcount = 0      //현재 레시피 수
-    var ingredient_array=ArrayList<String>()
     var recipss_array=ArrayList<String>()
     var uri_array=ArrayList<String>()
     val user = Firebase.auth.currentUser
@@ -32,7 +31,6 @@ class RecipesResult2 : AppCompatActivity() {
     }
     override fun onStart() {
         super.onStart()
-        println("여긴가")
         if(intent.hasExtra("recipss_array")){
             recipss_array= intent.getStringArrayListExtra("recipss_array")!!
         }
