@@ -21,7 +21,6 @@ class functionActivity : AppCompatActivity() {
 
         changePasswordBtn.setOnClickListener {
             startActivity(Intent(this, passwordResetActivity::class.java))//Login Activity로 이동
-            finish()
         }
 
         sendEmailButton.setOnClickListener {
