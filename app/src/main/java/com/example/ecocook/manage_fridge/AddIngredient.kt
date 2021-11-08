@@ -17,7 +17,7 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_add_ingredient.*
 
 class AddIngredient : AppCompatActivity() {
-    val ingredient_list= listOf<String>("과일","곡물","견과","정육/계란","유제품","김치/반찬","음료","기타")
+    val ingredient_list= listOf<String>("과일","쌀/곡물","견과","정육/계란","유제품","김치/반찬","음료","기타")
     val y=Array(140,{i->i+2000})
     val m=Array(12,{i->i+1})
     val d=Array(31,{i->i+1})

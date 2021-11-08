@@ -35,6 +35,22 @@ class RecipesResult : AppCompatActivity() {
         if(intent.hasExtra("ingredient_array")){
             ingredient_array= intent.getStringArrayListExtra("ingredient_array")!!
         }
+        val ms = ingredient_array.toSet().subtract(setOf(""))   //선택한 재료 셋
+        var title=""
+        var i=1
+        var j=ms.size
+        println(i)
+        println(j)
+        for(s in ms){
+            if(i==j){
+                title+=s+" 레시피 결과"
+            }
+            else{
+                title+=s+", "
+                i++
+            }
+        }
+        result_title.text=title
         val db = Firebase.firestore
         db.collection("recipes")
             .addSnapshotListener { querySnapshot: QuerySnapshot?, e: FirebaseFirestoreException? ->
@@ -50,10 +66,7 @@ class RecipesResult : AppCompatActivity() {
                             obj.category?.let { it1 ->
                                 Log.d("TAG", it1)
                             }
-
-                            val ms = ingredient_array.toSet().subtract(setOf(""))   //선택한 재료 셋
                             val ms2 = obj.ingredients!!.toSet()                     //레시피 재료 셋
-                            Log.d("TAG", ms.subtract(ms2).toString())
                             if(ms.subtract(ms2).isEmpty()){
                                 Log.d("TAG", obj.name.toString())
                                 AddLinear()
