@@ -61,12 +61,7 @@ class MainMenuActivity : AppCompatActivity(), View.OnClickListener {
         }
 
         RecommendRecipeButton.setOnClickListener { //추천 레시피 가기 버튼
-            startActivity(
-                Intent(
-                    this,
-                    RecipesSearch::class.java
-                )
-            ) //추천레시피 Activity 두번째 인자에 추가하시면됩니다!
+            startActivity(Intent(this, RecipesSearch::class.java))
         }
 
         MyPageButton.setOnClickListener {

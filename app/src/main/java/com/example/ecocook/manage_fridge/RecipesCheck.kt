@@ -132,7 +132,11 @@ class RecipesCheck : AppCompatActivity() {
         findViewById<LinearLayout>(62000+icount).addView(textname)
 
         val textdate = TextView(this)       //유통기한
-        textdate.text = "D-"+calculateDday(b).toString()
+        val dday=calculateDday(b)
+        if(dday<0)
+            textdate.text = "D+"+(dday*-1).toString()
+        else
+            textdate.text = "D-"+dday.toString()
         textdate.gravity= Gravity.CENTER
         textdate.layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT,

@@ -46,7 +46,11 @@ class DetailLook : AppCompatActivity() {
                         detailname=obj.name.toString()
                         setimg(detailimg,obj.category.toString())
                         detailtext.text=obj.name
-                        detailtext1.text="D-"+calculateDday(obj.expiryDate.toString())
+                        val dday=calculateDday(obj.expiryDate.toString())
+                        if(dday<0)
+                            detailtext1.text = "D+"+(dday*-1).toString()
+                        else
+                            detailtext1.text = "D-"+dday.toString()
                         detailtext2.text="카테고리\n"+obj.category
                         detailtext3.text="구매일자\n"+obj.buyDate.toString()
                         detailtext4.text="유통기한\n"+obj.expiryDate.toString()
