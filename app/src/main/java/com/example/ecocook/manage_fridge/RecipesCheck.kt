@@ -79,14 +79,13 @@ class RecipesCheck : AppCompatActivity() {
     }
     fun AddTablerow(){        //한 줄 추가
         val LL= TableRow(this)
-        LL.setBackgroundColor(Color.GREEN)      //임시 배경색
+        LL.setBackgroundColor(Color.parseColor("#330669FF"))
         LL.id=(60000+lcount)                    //id부여
         table2.addView(LL, TableRow.LayoutParams.MATCH_PARENT, changeDP(110))   //110을 changeDP로 dp값으로 변경해서 입력
     }
     @SuppressLint("ResourceType")       //이건 뭔지 잘 모르겠다, id=(int값)할 때 뜨는 에러때문에 추가
     fun AddLinear(){        //한 줄 추가
         val LL1= LinearLayout(this)      //한 음식재료를 위한 layout공간
-        LL1.setBackgroundColor(Color.GREEN)     //임시 배경색
         LL1.id=(61000+icount)                   //id부여
         LL1.gravity= Gravity.CENTER             //gravity를 center로
         LL1.orientation= LinearLayout.HORIZONTAL
@@ -95,7 +94,6 @@ class RecipesCheck : AppCompatActivity() {
         //현재 만든 layout에 마진값 추가
 
         val LL2= LinearLayout(this)     //한 음식재료를 보여주는 layout공간에서 재료와 체크박스를 나누기 위한 공간(재료부분)
-        LL2.setBackgroundColor(Color.GREEN)
         LL2.id=(62000+icount)
         LL2.gravity= Gravity.CENTER
         LL2.orientation= LinearLayout.VERTICAL
@@ -103,7 +101,6 @@ class RecipesCheck : AppCompatActivity() {
             LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
 
         val LL3= LinearLayout(this)     //한 음식재료를 보여주는 layout공간에서 재료와 체크박스를 나누기 위한 공간(체크박스부분)
-        LL3.setBackgroundColor(Color.GREEN)
         LL3.id=(63000+icount)
         findViewById<LinearLayout>(61000+icount).addView(LL3,
             LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT)
@@ -128,7 +125,6 @@ class RecipesCheck : AppCompatActivity() {
             changeDP(30)
         )
         textname.id=(65000+icount)
-        textname.setBackgroundColor(Color.GRAY)
         findViewById<LinearLayout>(62000+icount).addView(textname)
 
         val textdate = TextView(this)       //유통기한
@@ -142,7 +138,7 @@ class RecipesCheck : AppCompatActivity() {
             LinearLayout.LayoutParams.WRAP_CONTENT,
             changeDP(20)
         )
-        textdate.setBackgroundColor(Color.WHITE)
+        textdate.setBackgroundColor(Color.LTGRAY)
         textdate.id=(66000+icount)
         findViewById<LinearLayout>(62000+icount).addView(textdate)
 
