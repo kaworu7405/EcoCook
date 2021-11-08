@@ -41,6 +41,25 @@ class AuthLocationActivity : AppCompatActivity(){
 
         tedPermission()
 
+        val user= Firebase.auth.currentUser
+        val db = Firebase.firestore
+        val docRef = db.collection("users").document(user!!.uid)
+        docRef.get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    if (document.exists()) {
+                        var obj = document.toObject<MemberInfo>()
+                        if (obj != null) {
+                            if(obj.auth=="[인증]")
+                            {
+                                userLocationText.setText("마지막 인증 위치 : "+obj.address)
+                            }
+                        }
+                    }
+                }
+            }
+
+
         getLocationBtn.setOnClickListener {
             val locationListener = object : LocationListener {
                 override fun onLocationChanged(location: Location) {

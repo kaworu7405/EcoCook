@@ -1,6 +1,7 @@
 package com.example.ecocook
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +29,7 @@ class PostingAdapter (
         val contentText=row.findViewById<TextView>(R.id.contentText)
 
         authText.text="${data.auth}"
+        Log.d("TAG", "${data.auth}")
         postTitleText.text="${data.postingTitle}"
         contentText.text="${data.postingContent}"
 

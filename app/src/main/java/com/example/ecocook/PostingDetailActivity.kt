@@ -66,8 +66,11 @@ class PostingDetailActivity : AppCompatActivity() {
                 if (postingInfo.userId == user.uid) {
                     val postingInfo = intent.getSerializableExtra("postingInfo") as Posting
                     val myIntent = Intent(this, writePostingActivity::class.java)
+                    var isNew=false
                     myIntent.putExtra("postingInfo", postingInfo)
+                    myIntent.putExtra("isNew", isNew)
                     startActivity(myIntent)
+                    finish()
                 } else {
                     Toast.makeText(
                         baseContext, "본인의 글만 수정 가능합니다.",
@@ -75,7 +78,7 @@ class PostingDetailActivity : AppCompatActivity() {
                     ).show()
                 }
             }
-            finish()
+
         }
         removePostingBtn.setOnClickListener {
             if (user != null) {
@@ -87,6 +90,7 @@ class PostingDetailActivity : AppCompatActivity() {
                         baseContext, "삭제 완료 되었습니다.",
                         Toast.LENGTH_SHORT
                     ).show()
+                    finish()
                 } else {
                     Toast.makeText(
                         baseContext, "본인의 글만 삭제 가능합니다.",
@@ -94,7 +98,7 @@ class PostingDetailActivity : AppCompatActivity() {
                     ).show()
                 }
             }
-            finish()
+
         }
 
         messageButton.setOnClickListener {
@@ -157,7 +161,6 @@ class PostingDetailActivity : AppCompatActivity() {
 
     fun setValues() {
         val postingInfo = intent.getSerializableExtra("postingInfo") as Posting
-        getFireBaseProfileImage(postingInfo.userId.toString())
         getFireBaseFoodImage(postingInfo.id.toString())
         buyDateText.text = postingInfo.buyDate.toString()
         expiryDateText.text = postingInfo.expiryDate.toString()
@@ -178,6 +181,10 @@ class PostingDetailActivity : AppCompatActivity() {
         docRef.get()
             .addOnSuccessListener { document ->
                 postingUser.text = document.get("name").toString()
+                if(document.get("hasImage").toString()=="true")
+                {
+                    getFireBaseProfileImage(postingInfo.userId.toString()) //프로필이미지 설정
+                }
             }
 
         val commentAdapter = postingInfo.comments?.let {

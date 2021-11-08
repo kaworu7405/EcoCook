@@ -20,7 +20,7 @@ class MyPageActivity: AppCompatActivity() {
         setContentView(R.layout.activity_my_page)
         user=Firebase.auth.currentUser
         val db = Firebase.firestore
-        getFireBaseProfileImage()//프로필이미지 설정
+
 
         val docRef = db.collection("users").document(user!!.uid)
         docRef.get()
@@ -29,6 +29,11 @@ class MyPageActivity: AppCompatActivity() {
                     if(document.exists()){
                         var str= document.getData()?.get("name").toString()
                         UserNameText.setText(str)
+
+                        if(document.get("hasImage").toString()=="true")
+                        {
+                            getFireBaseProfileImage() //프로필이미지 설정
+                        }
                     }
                 } else {
                     finish()

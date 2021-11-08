@@ -77,15 +77,17 @@ class MyCommentActivity : AppCompatActivity() {
                     for (document in result.documents) {
                         val obj = document.toObject<Posting>()
                         if (obj != null) {
-                            var size: Int? = obj.comments?.size
-                            for (i in 0 until size!!) {
-                                var id = obj.comments?.get(i)?.keys.toString().replace("[", "")
-                                    .replace("]", "")
-                                if (id == user.uid) {
-                                    Log.d("TAG", obj.comments?.get(i).toString())
-                                    obj.comments?.let { commentsList.add(0, it[i]) }
-                                    postingIdList.add(0, obj.id.toString())
-                                    commentsIndex.add(0, i)
+                            if(obj.comments!=null) {
+                                var size: Int? = obj.comments?.size
+                                for (i in 0 until size!!) {
+                                    var id = obj.comments?.get(i)?.keys.toString().replace("[", "")
+                                        .replace("]", "")
+                                    if (id == user.uid) {
+                                        Log.d("TAG", obj.comments?.get(i).toString())
+                                        obj.comments?.let { commentsList.add(0, it[i]) }
+                                        postingIdList.add(0, obj.id.toString())
+                                        commentsIndex.add(0, i)
+                                    }
                                 }
                             }
                         }
