@@ -43,13 +43,15 @@ class CommentsAdapter (
             .addOnSuccessListener{document->
                 userIdText.text= document.get("name").toString()
 
-                var fileName="profile_"+keyName+".jpg"
+                if(document.get("hasImage").toString()=="true") {
+                    var fileName = "profile_" + keyName + ".jpg"
 
-                val storageRef=Firebase.storage.reference.child("profile_img/"+fileName)
-                storageRef.downloadUrl.addOnSuccessListener { uri->
+                    val storageRef = Firebase.storage.reference.child("profile_img/" + fileName)
+                    storageRef.downloadUrl.addOnSuccessListener { uri ->
                         glide.load(uri).into(img)
-                }.addOnFailureListener {
-                    // Handle any errors
+                    }.addOnFailureListener {
+                        // Handle any errors
+                    }
                 }
             }
 
