@@ -35,88 +35,100 @@ class RemoveIngredient : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_remove_ingredient)
-        select_btn.setOnClickListener(View.OnClickListener {            //취소하면 그냥 돌아감
-            startActivity(Intent(this, MyFridge::class.java))
-            finish()
-        })
-        select_remove_btn.setOnClickListener(View.OnClickListener {     //삭제 버튼
-            val db = Firebase.firestore
-            val f = db.collection(user?.uid.toString())
-            for(i in 0..icount-1){
-                if(check_array[i]==true){
-                    System.out.println(i)
-                    val deleteId=i+1 //여기에 삭제시킬 id 입력하시면 됩니다!
-                    f.orderBy("id").get()
-                        .addOnSuccessListener { result ->
-                            var foodNum=result.size()-1
-                            for(food in result){
-                                val obj = food.toObject<UserFridge>()
-                                if (obj != null && obj.id > deleteId) {
-                                    val newObjId=obj.id-1
-                                    obj.id = newObjId
-                                    f.document(newObjId.toString()).set(obj)
-                                    if(foodNum==obj.id){
-                                        f.document((obj.id+1).toString()).delete()
-                                        ingredient-=1
-                                        Log.d("TAG", "성공입니다!!")
-                                    }
-                                }
-                            }
-                            if(deleteId==result.size()){
-                                f.document(deleteId.toString()).delete()
-                                Log.d("TAG", "성공입니다!!")
-                            }
-                        }
-                        .addOnFailureListener { exception ->
-                        }
-                }
-            }
-
-            var pref = getSharedPreferences("pref",Context.MODE_PRIVATE)   //앱종료되도 값 유지
-            pref.edit().putInt("ingredient",ingredient).apply()         //ingredient값 저장
-            startActivity(Intent(this, MyFridge::class.java))
-            finish()
-        })
-    }
-    override fun onBackPressed() {
-        startActivity(Intent(this, MyFridge::class.java))
-        finish()
-    }
-    override fun onStart() {
-        super.onStart()
         var pref = getSharedPreferences("pref", Context.MODE_PRIVATE)
         ingredient = pref.getInt("ingredient",0)            //ingredient값 가져오기
         val db = Firebase.firestore
         val f = db.collection(user?.uid.toString())
         f.addSnapshotListener { querySnapshot: QuerySnapshot?, _: FirebaseFirestoreException? ->
-            if (querySnapshot != null) {
-                // 반복문으로 모든 음식에 접근합니다.(document가 음식)
-                // UserFridge.kt에 각 필드 설명 적혀있습니다!
-                for (document in querySnapshot.documents) {
-                    val obj = document.toObject<UserFridge>()
-                    if (obj != null) {
-                        if(icount==lcount*3){
-                            AddTablerow()
-                            lcount+=1
+            if(icount<ingredient){      //삭제후 추가생성방지
+                if (querySnapshot != null) {
+                    // 반복문으로 모든 음식에 접근합니다.(document가 음식)
+                    // UserFridge.kt에 각 필드 설명 적혀있습니다!
+                    for (document in querySnapshot.documents) {
+                        val obj = document.toObject<UserFridge>()
+                        if (obj != null) {
+                            if(icount==lcount*3){
+                                AddTablerow()
+                                lcount+=1
+                            }
+                            AddLinear()
+                            AddIngredient(obj.name.toString(),obj.category.toString(),obj.expiryDate.toString())
+                            icount+=1
                         }
-                        AddLinear()
-                        AddIngredient(obj.name.toString(),obj.category.toString(),obj.expiryDate.toString())
-                        icount+=1
                     }
                 }
             }
         }
+        select_btn.setOnClickListener(View.OnClickListener {            //취소하면 그냥 돌아감
+            startActivity(Intent(this, MyFridge::class.java))
+            finish()
+        })
+        select_remove_btn.setOnClickListener(View.OnClickListener {     //삭제 버튼
+            for(i in icount-1 downTo 0){
+                if(check_array[i]==true){
+                    delete(i)
+                }
+            }
+            onStop()
+        })
+    }
+    fun delete(i:Int){
+        val deleteId=i+1 //여기에 삭제시킬 id 입력하시면 됩니다!
+        println("삭제")
+        println(deleteId)
+        val db = Firebase.firestore
+        val f = db.collection(user?.uid.toString())
+        f.orderBy("id").get()
+            .addOnSuccessListener { result ->
+                if(deleteId==result.size()){
+                    f.document(deleteId.toString()).delete()
+                    ingredient-=1
+                    Log.d("TAG", "성공입니다!!")
+                    println("document")
+                }
+                else{
+                    var foodNum=result.size()-1
+                    for(food in result){
+                        val obj = food.toObject<UserFridge>()
+                        if (obj != null && obj.id > deleteId) {
+                            val newObjId=obj.id-1
+                            obj.id = newObjId
+                            f.document(newObjId.toString()).set(obj)
+                            if(foodNum==obj.id){
+                                f.document((obj.id+1).toString()).delete()
+                                ingredient-=1
+                                Log.d("TAG", "성공입니다!!")
+                            }
+                        }
+                    }
+                }
+            }
+            .addOnFailureListener { exception ->
+            }
+    }
+    override fun onBackPressed() {
+        var pref = getSharedPreferences("pref",Context.MODE_PRIVATE)   //앱종료되도 값 유지
+        pref.edit().putInt("ingredient",ingredient).apply()         //ingredient값 저장
+        startActivity(Intent(this, MyFridge::class.java))
+        finish()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        var pref = getSharedPreferences("pref",Context.MODE_PRIVATE)   //앱종료되도 값 유지
+        pref.edit().putInt("ingredient",ingredient).apply()         //ingredient값 저장
+        startActivity(Intent(this, MyFridge::class.java))
+        finish()
     }
     fun AddTablerow(){        //한 줄 추가
         val LL= TableRow(this)
-        LL.setBackgroundColor(Color.GREEN)      //임시 배경색
+        LL.setBackgroundColor(Color.parseColor("#330669FF"))
         LL.id=(60000+lcount)                    //id부여
         table2.addView(LL, TableRow.LayoutParams.MATCH_PARENT, changeDP(110))   //110을 changeDP로 dp값으로 변경해서 입력
     }
     @SuppressLint("ResourceType")       //이건 뭔지 잘 모르겠다, id=(int값)할 때 뜨는 에러때문에 추가
     fun AddLinear(){        //한 줄 추가
         val LL1= LinearLayout(this)      //한 음식재료를 위한 layout공간
-        LL1.setBackgroundColor(Color.GREEN)     //임시 배경색
         LL1.id=(61000+icount)                   //id부여
         LL1.gravity= Gravity.CENTER             //gravity를 center로
         LL1.orientation= LinearLayout.HORIZONTAL
@@ -125,7 +137,6 @@ class RemoveIngredient : AppCompatActivity() {
         //현재 만든 layout에 마진값 추가
 
         val LL2= LinearLayout(this)     //한 음식재료를 보여주는 layout공간에서 재료와 체크박스를 나누기 위한 공간(재료부분)
-        LL2.setBackgroundColor(Color.GREEN)
         LL2.id=(62000+icount)
         LL2.gravity= Gravity.CENTER
         LL2.orientation= LinearLayout.VERTICAL
@@ -133,7 +144,6 @@ class RemoveIngredient : AppCompatActivity() {
             LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
 
         val LL3= LinearLayout(this)     //한 음식재료를 보여주는 layout공간에서 재료와 체크박스를 나누기 위한 공간(체크박스부분)
-        LL3.setBackgroundColor(Color.GREEN)
         LL3.id=(63000+icount)
         findViewById<LinearLayout>(61000+icount).addView(LL3,
             LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT)
@@ -158,7 +168,6 @@ class RemoveIngredient : AppCompatActivity() {
             changeDP(30)
         )
         textname.id=(65000+icount)
-        textname.setBackgroundColor(Color.GRAY)
         findViewById<LinearLayout>(62000+icount).addView(textname)
 
         val textdate = TextView(this)       //유통기한
@@ -172,7 +181,7 @@ class RemoveIngredient : AppCompatActivity() {
             LinearLayout.LayoutParams.WRAP_CONTENT,
             changeDP(20)
         )
-        textdate.setBackgroundColor(Color.WHITE)
+        textdate.setBackgroundColor(Color.LTGRAY)
         textdate.id=(66000+icount)
         findViewById<LinearLayout>(62000+icount).addView(textdate)
 

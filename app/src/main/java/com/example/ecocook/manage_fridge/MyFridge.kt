@@ -50,6 +50,8 @@ class MyFridge : AppCompatActivity() {
             finish()
         })
         remove_btn.setOnClickListener(View.OnClickListener {
+            var pref = getSharedPreferences("pref",Context.MODE_PRIVATE)
+            pref.edit().putInt("ingredient",icount).apply()             //화면종료? 이동시? ingredient저장
             startActivity(Intent(this, RemoveIngredient::class.java))
             finish()
         })
@@ -72,47 +74,49 @@ class MyFridge : AppCompatActivity() {
             var pref = getSharedPreferences("pref",Context.MODE_PRIVATE)
             ingredient = pref.getInt("ingredient",0)    //ingredient가져오기 값없으면 0을 가져옴
             sortindex = pref.getInt("sortindex",0)
-            setspinner()
-            if (querySnapshot != null) {
-                // 반복문으로 모든 음식에 접근합니다.(document가 음식)
-                // UserFridge.kt에 각 필드 설명 적혀있습니다!
-                for (document in querySnapshot.documents) {
-                    val obj = document.toObject<UserFridge>()
-                    if (obj != null) {
-                        objlist.add(obj)    //정렬
-                    }
-                }
-                if(sortindex==0){
-                    for(obj in objlist){
-                        if(icount==lcount*4){
-                            AddTablerow()
-                            lcount+=1
+            if(icount<ingredient){      //삭제후 추가생성방지
+                setspinner()
+                if (querySnapshot != null) {
+                    // 반복문으로 모든 음식에 접근합니다.(document가 음식)
+                    // UserFridge.kt에 각 필드 설명 적혀있습니다!
+                    for (document in querySnapshot.documents) {
+                        val obj = document.toObject<UserFridge>()
+                        if (obj != null) {
+                            objlist.add(obj)    //정렬
                         }
-                        AddLinear(obj)
-                        AddIngredient(obj.name.toString(),obj.category.toString(),obj.expiryDate.toString())
-                        icount+=1
                     }
-                }
-                else if(sortindex==1){
-                    for(obj in objlist.sortedWith(compareBy ({ it.name },{ it.expiryDate}))){
-                        if(icount==lcount*4){
-                            AddTablerow()
-                            lcount+=1
+                    if(sortindex==0){
+                        for(obj in objlist){
+                            if(icount==lcount*4){
+                                AddTablerow()
+                                lcount+=1
+                            }
+                            AddLinear(obj)
+                            AddIngredient(obj.name.toString(),obj.category.toString(),obj.expiryDate.toString())
+                            icount+=1
                         }
-                        AddLinear(obj)
-                        AddIngredient(obj.name.toString(),obj.category.toString(),obj.expiryDate.toString())
-                        icount+=1
                     }
-                }
-                else if(sortindex==2){
-                    for(obj in objlist.sortedWith(compareBy ({ it.expiryDate },{ it.name}))){
-                        if(icount==lcount*4){
-                            AddTablerow()
-                            lcount+=1
+                    else if(sortindex==1){
+                        for(obj in objlist.sortedWith(compareBy ({ it.name },{ it.expiryDate}))){
+                            if(icount==lcount*4){
+                                AddTablerow()
+                                lcount+=1
+                            }
+                            AddLinear(obj)
+                            AddIngredient(obj.name.toString(),obj.category.toString(),obj.expiryDate.toString())
+                            icount+=1
                         }
-                        AddLinear(obj)
-                        AddIngredient(obj.name.toString(),obj.category.toString(),obj.expiryDate.toString())
-                        icount+=1
+                    }
+                    else if(sortindex==2){
+                        for(obj in objlist.sortedWith(compareBy ({ it.expiryDate },{ it.name}))){
+                            if(icount==lcount*4){
+                                AddTablerow()
+                                lcount+=1
+                            }
+                            AddLinear(obj)
+                            AddIngredient(obj.name.toString(),obj.category.toString(),obj.expiryDate.toString())
+                            icount+=1
+                        }
                     }
                 }
             }
@@ -137,16 +141,14 @@ class MyFridge : AppCompatActivity() {
     fun AddTablerow(){        //한 줄 추가
         val LL= TableRow(this)
         LL.id=(50000+lcount)
+        LL.setBackgroundColor(Color.parseColor("#330669FF"))
         table1.addView(LL,TableRow.LayoutParams.MATCH_PARENT, changeDP(110))
 
 
     }
     @SuppressLint("ResourceType")       //이건 뭔지 잘 모르겠다, id=(int값)할 때 뜨는 에러때문에 추가
     fun AddLinear(obj: UserFridge){        //한 칸 추가
-        //val idArray = resources.obtainTypedArray(R.array.id_group_1)      //res에 있는 id.xml 아이디사용  일단은 다른 방법으로 해서 안씀
-        //val id = idArray.getResourceId(ingredient,-1)                     //위와 동일
         val LL= LinearLayout(this)
-        //LL.id=id                      //rse에 있는 아이디사용
         LL.id=(10000+icount)
         LL.gravity=Gravity.CENTER
         LL.orientation=LinearLayout.VERTICAL
