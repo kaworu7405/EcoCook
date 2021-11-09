@@ -40,7 +40,7 @@ class PostingActivity : AppCompatActivity() {
             myIntent.putExtra("postingInfo", clickedPosting)
             startActivity(myIntent)
              */
-            var isNew=true
+            var isNew = true
             val myIntent = Intent(this, writePostingActivity::class.java)
             myIntent.putExtra("isNew", isNew)
             startActivity(myIntent)
@@ -54,28 +54,30 @@ class PostingActivity : AppCompatActivity() {
         checkBox()
     }
 
-    fun searchPosting()
-    {
-        var findText=searchInputText.text
+    fun searchPosting() {
+        var findText = searchInputText.text
         val user = Firebase.auth.currentUser
         if (user != null) {
             val db = Firebase.firestore
-            db.collection("Posting").orderBy("id")
-                .addSnapshotListener { querySnapshot: QuerySnapshot?, e: FirebaseFirestoreException? ->
-                    if (querySnapshot != null) {
-                        postsList.clear()
-                        for (document in querySnapshot.documents) {
-                            val obj = document.toObject<Posting>()
-                            if (obj != null) {
-                                if(obj.postingContent?.contains(findText) == true|| obj.postingTitle?.contains(findText) == true){
-                                    postsList.add(0, obj)
-                                }
+            db.collection("Posting").orderBy("id").get().addOnSuccessListener { result ->
+                if (result != null) {
+                    postsList.clear()
+                    for (document in result) {
+                        val obj = document.toObject<Posting>()
+                        if (obj != null) {
+                            if (obj.postingContent?.contains(findText) == true || obj.postingTitle?.contains(
+                                    findText
+                                ) == true
+                            ) {
+                                postsList.add(0, obj)
                             }
                         }
-                        val postingAdapter = PostingAdapter(this, R.layout.post_view, postsList)
-                        postingList.adapter = postingAdapter
                     }
+                    Log.d("TAG", "111111111111111111111111111")
+                    val postingAdapter = PostingAdapter(this, R.layout.post_view, postsList)
+                    postingList.adapter = postingAdapter
                 }
+            }
         }
     }
 
@@ -122,6 +124,54 @@ class PostingActivity : AppCompatActivity() {
         if (user != null) {
             val db = Firebase.firestore
 
+            db.collection("Posting").orderBy("id").get().addOnSuccessListener {result->
+                if (result != null) {
+                    postsList.clear()
+                    for (document in result) {
+                        val obj = document.toObject<Posting>()
+                        if (obj != null) {
+                            if (category1 == "전체 지역") {
+                                if (auth == "[인증]" && obj.auth == auth) {
+                                    postsList.add(0, obj)
+                                } else if (auth == "[일반]" && obj.auth == auth) {
+                                    postsList.add(0, obj)
+                                } else if (auth == "") {
+                                    postsList.add(0, obj)
+                                }
+                            } else if (obj.area1.equals(category1)) {
+                                if (category2 == "전체 지역") {
+                                    if (auth == "[인증]" && obj.auth == auth) {
+                                        postsList.add(0, obj)
+                                    } else if (auth == "[일반]" && obj.auth == auth) {
+                                        postsList.add(0, obj)
+                                    } else if (auth == "") {
+                                        postsList.add(0, obj)
+                                    }
+                                } else if (category2 == obj.area2) {
+                                    if (auth == "[인증]" && obj.auth == auth) {
+                                        postsList.add(0, obj)
+                                    } else if (auth == "[일반]" && obj.auth == auth) {
+                                        postsList.add(0, obj)
+                                    } else if (auth == "") {
+                                        postsList.add(0, obj)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    Log.d("TAG", "22222222222222222222")
+                    val postingAdapter = PostingAdapter(this, R.layout.post_view, postsList)
+                    postingList.adapter = postingAdapter
+                }
+            }
+        }
+    }
+
+    fun initPosting(category1: String, category2: String, auth: String) {
+        val user = Firebase.auth.currentUser
+        if (user != null) {
+            val db = Firebase.firestore
+
             db.collection("Posting").orderBy("id")
                 .addSnapshotListener { querySnapshot: QuerySnapshot?, e: FirebaseFirestoreException? ->
                     if (querySnapshot != null) {
@@ -134,7 +184,7 @@ class PostingActivity : AppCompatActivity() {
                                         postsList.add(0, obj)
                                     } else if (auth == "[일반]" && obj.auth == auth) {
                                         postsList.add(0, obj)
-                                    } else if(auth==""){
+                                    } else if (auth == "") {
                                         postsList.add(0, obj)
                                     }
                                 } else if (obj.area1.equals(category1)) {
@@ -143,7 +193,7 @@ class PostingActivity : AppCompatActivity() {
                                             postsList.add(0, obj)
                                         } else if (auth == "[일반]" && obj.auth == auth) {
                                             postsList.add(0, obj)
-                                        } else if(auth==""){
+                                        } else if (auth == "") {
                                             postsList.add(0, obj)
                                         }
                                     } else if (category2 == obj.area2) {
@@ -151,13 +201,14 @@ class PostingActivity : AppCompatActivity() {
                                             postsList.add(0, obj)
                                         } else if (auth == "[일반]" && obj.auth == auth) {
                                             postsList.add(0, obj)
-                                        } else if(auth==""){
+                                        } else if (auth == "") {
                                             postsList.add(0, obj)
                                         }
                                     }
                                 }
                             }
                         }
+                        Log.d("TAG", "333333333333333333")
                         val postingAdapter = PostingAdapter(this, R.layout.post_view, postsList)
                         postingList.adapter = postingAdapter
                     }
@@ -190,7 +241,7 @@ class PostingActivity : AppCompatActivity() {
 
         areaList1.setOnItemClickListener { adapterView, view, i, l ->
             val clickedArea1 = areaArray1[i]
-            area1=clickedArea1
+            area1 = clickedArea1
             if (clickedArea1.equals("전체 지역")) {
                 setAreaList2("전체 지역", R.array.allAreaArray, authCondition)
 
@@ -257,7 +308,7 @@ class PostingActivity : AppCompatActivity() {
         areaList2.adapter = adapter
         areaList2.setOnItemClickListener { adapterView, view, i, l ->
             val clickedArea1 = areaArray2[i]
-            area2=clickedArea1
+            area2 = clickedArea1
             setPosting(str, areaArray2.get(i), authCondition)
         }
     }

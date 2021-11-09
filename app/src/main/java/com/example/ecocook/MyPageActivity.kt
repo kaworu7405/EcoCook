@@ -2,6 +2,7 @@ package com.example.ecocook
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -32,6 +33,7 @@ class MyPageActivity: AppCompatActivity() {
 
                         if(document.get("hasImage").toString()=="true")
                         {
+                            Log.d("TAG", "탄다.")
                             getFireBaseProfileImage() //프로필이미지 설정
                         }
                     }

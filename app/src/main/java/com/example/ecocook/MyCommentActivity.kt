@@ -56,15 +56,6 @@ class MyCommentActivity : AppCompatActivity() {
         }
     }
 
-    /*
-    val deleteId=3 //여기에 삭제시킬 id 입력하시면 됩니다!
-            f.orderBy("id").get()
-                .addOnSuccessListener { result ->
-                    var foodNum=result.size()-1
-                    for(food in result){
-                        val obj = food.toObject<UserFridge>()
-
-     */
     fun init() {
         val user = Firebase.auth.currentUser
         if (user != null) {

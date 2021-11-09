@@ -9,6 +9,7 @@ import androidx.core.app.ActivityCompat
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.activity_edit_profile.*
@@ -70,6 +71,22 @@ class ChangeProfileActivity: AppCompatActivity() {
 
         ChangeUserPhotoButton.setOnClickListener {
             openGallery()
+            val docRef = db.collection("users").document(user!!.uid)
+            docRef.get()
+                .addOnSuccessListener { document ->
+                    if (document != null) {
+                        if (document.exists()) {
+                            var obj = document.toObject<MemberInfo>()
+                            if (obj != null) {
+                                obj.hasImage = "true"
+                                db.collection("users").document(user!!.uid).set(obj)
+                            }
+                        }
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    //Log.d(TAG, "get failed with ", exception)
+                }
         }
 
 

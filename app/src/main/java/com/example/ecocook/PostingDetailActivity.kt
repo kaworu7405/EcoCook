@@ -3,6 +3,7 @@ package com.example.ecocook
 import android.content.Intent
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -57,8 +58,6 @@ class PostingDetailActivity : AppCompatActivity() {
 
                 commentInputText.setText("")
             }
-
-
         }
 
         revisePostingBtn.setOnClickListener {
@@ -144,16 +143,6 @@ class PostingDetailActivity : AppCompatActivity() {
                         myIntent.putExtra("message", m)
                         startActivity(myIntent)
                     }
-                    /*
-                        fun postClicked() {
-        postingList.setOnItemClickListener { adapterView, view, i, l ->
-            val clickedPosting = postsList[i]
-            val myIntent = Intent(this, PostingDetailActivity::class.java)
-            myIntent.putExtra("postingInfo", clickedPosting)
-            startActivity(myIntent)
-        }
-    }
-                     */
                 }
             }
         }
@@ -187,13 +176,10 @@ class PostingDetailActivity : AppCompatActivity() {
                 }
             }
 
-        val commentAdapter = postingInfo.comments?.let {
-            CommentsAdapter(
-                this, R.layout.comment_view,
-                it
-            )
-        }
-        commentListView.adapter = commentAdapter
+        Log.d("TAG", postingInfo.postingTitle.toString())
+        Log.d("TAG", "썰마이게여러번타나????")
+        var commentsAdapter=CommentsAdapter(this, R.layout.comment_view, postingInfo.comments!!)
+        commentListView.adapter=commentsAdapter
     }
 
     fun getFireBaseProfileImage(uid: String) { //profile 사진을 ImageView에 설정해주는 함수
