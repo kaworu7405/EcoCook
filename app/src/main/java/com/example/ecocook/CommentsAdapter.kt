@@ -37,15 +37,17 @@ class CommentsAdapter (
 
         val db = Firebase.firestore
         val keyName=data.keys.toString().replace("[", "").replace("]", "")
-
+        Log.d("TAG", "여러번 탄다11111111111111111111")
         val docRef = db.collection("users").document(keyName)
         docRef.get()
             .addOnSuccessListener{document->
-                userIdText.text= document.get("name").toString()
+                Log.d("TAG", keyName.toString())
 
+                userIdText.text= document.get("name").toString()
+                Log.d("TAG", document.get("name").toString())
                 if(document.get("hasImage").toString()=="true") {
                     var fileName = "profile_" + keyName + ".jpg"
-
+                    Log.d("TAG", "여러번 탄다2222222222222222222222222")
                     val storageRef = Firebase.storage.reference.child("profile_img/" + fileName)
                     storageRef.downloadUrl.addOnSuccessListener { uri ->
                         glide.load(uri).into(img)

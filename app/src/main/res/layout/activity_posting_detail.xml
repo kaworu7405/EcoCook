@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:scrollbarAlwaysDrawVerticalTrack="true"
         android:scrollbars="vertical"
@@ -16,7 +16,6 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="400dp"
-            android:layout_marginTop="10dp"
             android:background="#D3CECE">
 
             <FrameLayout
@@ -201,19 +200,22 @@
 
         </FrameLayout>
 
-        <ListView
-            android:id="@+id/commentListView"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:footerDividersEnabled="false"
-            android:headerDividersEnabled="false">
+            android:layout_height="208dp"
+            android:orientation="horizontal">
 
-        </ListView>
+            <ListView
+                android:id="@+id/commentListView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </ListView>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <EditText
@@ -230,6 +232,7 @@
                 android:layout_weight="1"
                 android:text="댓글입력" />
         </LinearLayout>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
