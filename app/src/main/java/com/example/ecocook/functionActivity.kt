@@ -15,12 +15,12 @@ class functionActivity : AppCompatActivity() {
 
         LogoutButton.setOnClickListener {
             FirebaseAuth.getInstance().signOut() //로그아웃
-            startActivity(Intent(this, LoginActivity::class.java))//Login Activity로 이동
+            startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }
 
         changePasswordBtn.setOnClickListener {
-            startActivity(Intent(this, passwordResetActivity::class.java))//Login Activity로 이동
+            startActivity(Intent(this, passwordResetActivity::class.java))
         }
 
         sendEmailButton.setOnClickListener {
@@ -30,6 +30,10 @@ class functionActivity : AppCompatActivity() {
             email.putExtra(Intent.EXTRA_EMAIL, address)
             email.putExtra(Intent.EXTRA_SUBJECT, "ECOCOOK BUG REPORT")
             startActivity(email)
+        }
+
+        ruleButton.setOnClickListener {
+            startActivity(Intent(this, RuleActivity::class.java))
         }
     }
 }

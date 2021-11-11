@@ -32,7 +32,7 @@ class PostingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_posting)
 
-        setPosting("전체 지역", "전체 지역", "")
+        initPosting("전체 지역", "전체 지역", "")
         setAreaList()
         postingBtn.setOnClickListener {
             /*

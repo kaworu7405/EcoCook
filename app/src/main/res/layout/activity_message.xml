@@ -13,7 +13,7 @@
         <ListView
             android:id="@+id/messageLogList"
             android:layout_width="match_parent"
-            android:layout_height="600dp"
+            android:layout_height="300dp"
             android:stackFromBottom="true">
 
         </ListView>
@@ -26,7 +26,7 @@
             <EditText
                 android:id="@+id/chattingInputText"
                 android:layout_width="349dp"
-                android:layout_height="match_parent"
+                android:layout_height="100dp"
                 android:ems="10"
                 android:inputType="textMultiLine"
                 android:scrollbars="vertical" />
