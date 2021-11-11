@@ -178,8 +178,11 @@ class PostingDetailActivity : AppCompatActivity() {
 
         Log.d("TAG", postingInfo.postingTitle.toString())
         Log.d("TAG", "썰마이게여러번타나????")
-        var commentsAdapter=CommentsAdapter(this, R.layout.comment_view, postingInfo.comments!!)
-        commentListView.adapter=commentsAdapter
+        if(postingInfo.comments!=null){
+            var commentsAdapter=CommentsAdapter(this, R.layout.comment_view, postingInfo.comments!!)
+            commentListView.adapter=commentsAdapter
+        }
+
     }
 
     fun getFireBaseProfileImage(uid: String) { //profile 사진을 ImageView에 설정해주는 함수

@@ -75,10 +75,11 @@
         <activity android:name=".MyPostingActivity" />
         <activity android:name=".MyCommentActivity" />
         <activity android:name=".MyMessageActivity" />
-        <activity android:name=".MessageActivity" />
+        <activity android:name=".MessageActivity"/>
         <activity android:name=".MyRecipes" />
         <activity android:name=".manage_fridge.RecipesCheck" />
         <activity android:name=".manage_fridge.RecipesResult" />
+        <activity android:name=".RuleActivity" />
     </application>
 
 </manifest>
