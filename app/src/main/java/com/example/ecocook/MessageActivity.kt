@@ -31,17 +31,17 @@ class MessageActivity : AppCompatActivity() {
 
             if (snapshot != null && snapshot.exists()) {
                 val obj = snapshot.toObject<Message>()
-                val messageAdapter =
-                    message.message?.let {
-                        obj?.message?.let { it1 ->
-                            MessageContentAdapter(
-                                this, R.layout.message_content_view,
-                                it1
-                            )
-                        }
+                Log.w("TAG", "11111111111111111111111", e)
+                if (obj != null) {
+                    if(obj.message!=null){
+                        val messageAdapter=MessageContentAdapter(this, R.layout.message_content_view,
+                            obj.message!!
+                        )
+                        messageLogList.adapter = messageAdapter
                     }
-                messageLogList.adapter = messageAdapter
+                }
             } else {
+                Log.w("TAG", "222222222222222222222", e)
                 Log.d("TAG", "Current data: null")
             }
         }
