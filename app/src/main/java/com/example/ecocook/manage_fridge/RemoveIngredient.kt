@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.Gravity
 import android.view.View
@@ -20,11 +21,16 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import com.squareup.okhttp.Dispatcher
 import kotlinx.android.synthetic.main.activity_my_fridge.*
 import kotlinx.android.synthetic.main.activity_remove_ingredient.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.concurrent.schedule
+import kotlin.coroutines.CoroutineContext
 
 class RemoveIngredient : AppCompatActivity() {
     var ingredient = 0      //총 재료
@@ -37,6 +43,7 @@ class RemoveIngredient : AppCompatActivity() {
         setContentView(R.layout.activity_remove_ingredient)
         var pref = getSharedPreferences("pref", Context.MODE_PRIVATE)
         ingredient = pref.getInt("ingredient",0)            //ingredient값 가져오기
+        println(ingredient)
         val db = Firebase.firestore
         val f = db.collection(user?.uid.toString())
         f.addSnapshotListener { querySnapshot: QuerySnapshot?, _: FirebaseFirestoreException? ->
@@ -60,57 +67,62 @@ class RemoveIngredient : AppCompatActivity() {
             }
         }
         select_btn.setOnClickListener(View.OnClickListener {            //취소하면 그냥 돌아감
-            startActivity(Intent(this, MyFridge::class.java))
-            finish()
-        })
-        select_remove_btn.setOnClickListener(View.OnClickListener {     //삭제 버튼
-            for(i in icount-1 downTo 0){
-                if(check_array[i]==true){
-                    delete(i)
-                }
-            }
             onStop()
         })
-    }
-    fun delete(i:Int){
-        val deleteId=i+1 //여기에 삭제시킬 id 입력하시면 됩니다!
-        println("삭제")
-        println(deleteId)
-        val db = Firebase.firestore
-        val f = db.collection(user?.uid.toString())
-        f.orderBy("id").get()
-            .addOnSuccessListener { result ->
-                if(deleteId==result.size()){
-                    f.document(deleteId.toString()).delete()
-                    ingredient-=1
-                    Log.d("TAG", "성공입니다!!")
-                    println("document")
-                }
-                else{
-                    var foodNum=result.size()-1
-                    for(food in result){
-                        val obj = food.toObject<UserFridge>()
-                        if (obj != null && obj.id > deleteId) {
-                            val newObjId=obj.id-1
-                            obj.id = newObjId
-                            f.document(newObjId.toString()).set(obj)
-                            if(foodNum==obj.id){
-                                f.document((obj.id+1).toString()).delete()
-                                ingredient-=1
-                                Log.d("TAG", "성공입니다!!")
-                            }
+        select_remove_btn.setOnClickListener(View.OnClickListener {     //삭제 버튼
+
+            runBlocking {
+                val a=launch {
+                    var deleteindex=ArrayList<Int>()
+                    for(i in icount-1 downTo 0){
+                        if(check_array[i]==true){
+                            deleteindex.add(i+1)
                         }
                     }
+                    delete(deleteindex)
                 }
+                println("aaa")
+                a.join()
+                println("삭제끝")
+                //onStop()
             }
-            .addOnFailureListener { exception ->
-            }
+
+        })
+
     }
+    suspend fun delete(removelist:ArrayList<Int>){
+        runBlocking {
+            val db = Firebase.firestore
+            val f = db.collection(user?.uid.toString())
+            var sorti=1
+
+            f.orderBy("id").get().addOnSuccessListener { result ->
+                for (food in result) {
+                    val obj = food.toObject<UserFridge>()
+                    if (obj != null && !(removelist.contains(obj.id))) {
+                        print("objid:")
+                        println(obj.id)
+                        println(obj.name)
+                        print("sorti")
+                        println(sorti)
+                        f.document(sorti.toString()).set(obj)
+                        f.document(sorti.toString()).update("id",sorti)
+                        sorti += 1
+                    }
+                }
+                for(i in 0..removelist.size-1) {
+                    println(i)
+                    println(ingredient)
+                    f.document(ingredient.toString()).delete()
+                    ingredient -= 1
+                }
+                println("완료")
+            }
+        }
+    }
+
     override fun onBackPressed() {
-        var pref = getSharedPreferences("pref",Context.MODE_PRIVATE)   //앱종료되도 값 유지
-        pref.edit().putInt("ingredient",ingredient).apply()         //ingredient값 저장
-        startActivity(Intent(this, MyFridge::class.java))
-        finish()
+        onStop()
     }
 
     override fun onStop() {
