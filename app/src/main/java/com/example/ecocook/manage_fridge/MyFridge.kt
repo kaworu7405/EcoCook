@@ -45,29 +45,6 @@ class MyFridge : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_fridge)
-        add_btn.setOnClickListener(View.OnClickListener {
-            startActivity(Intent(this, AddIngredient::class.java))    //원래는 여기로 넘어가야댐
-            finish()
-        })
-        remove_btn.setOnClickListener(View.OnClickListener {
-            var pref = getSharedPreferences("pref",Context.MODE_PRIVATE)
-            pref.edit().putInt("ingredient",icount).apply()             //화면종료? 이동시? ingredient저장
-            startActivity(Intent(this, RemoveIngredient::class.java))
-            finish()
-        })
-
-        check_btn.setOnClickListener(View.OnClickListener {
-            startActivity(Intent(this, RecipesCheck::class.java))
-            finish()
-        })
-        icon2list.setOnClickListener(View.OnClickListener {
-            startActivity(Intent(this, DetailList::class.java))
-            finish()
-        })
-    }
-
-    override fun onStart() {
-        super.onStart()
         val db = Firebase.firestore
         val f = db.collection(user?.uid.toString())
         f.addSnapshotListener { querySnapshot: QuerySnapshot?, _: FirebaseFirestoreException? ->
@@ -119,6 +96,30 @@ class MyFridge : AppCompatActivity() {
                 }
             }
         }
+        add_btn.setOnClickListener(View.OnClickListener {
+            startActivity(Intent(this, AddIngredient::class.java))    //원래는 여기로 넘어가야댐
+            finish()
+        })
+        remove_btn.setOnClickListener(View.OnClickListener {
+            var pref = getSharedPreferences("pref",Context.MODE_PRIVATE)
+            pref.edit().putInt("ingredient",icount).apply()             //화면종료? 이동시? ingredient저장
+            startActivity(Intent(this, RemoveIngredient::class.java))
+            finish()
+        })
+
+        check_btn.setOnClickListener(View.OnClickListener {
+            startActivity(Intent(this, RecipesCheck::class.java))
+            finish()
+        })
+        icon2list.setOnClickListener(View.OnClickListener {
+            startActivity(Intent(this, DetailList::class.java))
+            finish()
+        })
+    }
+
+    override fun onStart() {
+        super.onStart()
+
 
     }
 
