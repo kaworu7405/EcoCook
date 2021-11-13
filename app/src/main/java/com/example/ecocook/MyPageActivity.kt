@@ -72,10 +72,13 @@ class MyPageActivity: AppCompatActivity() {
 
     fun getFireBaseProfileImage(){ //profile 사진을 ImageView에 설정해주는 함수
         var fileName="profile_"+user!!.uid.toString()+".jpg"
-
+        if(this.isFinishing){
+            return
+        }
+        val glide=Glide.with(this)
         val storageRef=Firebase.storage.reference.child("profile_img/"+fileName)
         storageRef.downloadUrl.addOnSuccessListener { uri->
-            Glide.with(this).load(uri).into(UserProfileImage)
+            glide.load(uri).into(UserProfileImage)
         }.addOnFailureListener {
             // Handle any errors
         }

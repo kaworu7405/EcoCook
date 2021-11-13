@@ -188,10 +188,13 @@ class writePostingActivity : AppCompatActivity() {
 
     fun getFireBaseFoodImage(id:String){
         var fileName="posting_"+id+".jpg"
-
+        if(this.isFinishing){
+            return
+        }
+        val glide=Glide.with(this)
         val storageRef=Firebase.storage.reference.child("posting_img/"+fileName)
         storageRef.downloadUrl.addOnSuccessListener { uri->
-            Glide.with(this).load(uri).into(imgUrl)
+            glide.load(uri).into(imgUrl)
         }.addOnFailureListener {
             // Handle any errors
         }
