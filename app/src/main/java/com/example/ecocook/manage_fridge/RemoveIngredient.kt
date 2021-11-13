@@ -105,6 +105,7 @@ class RemoveIngredient : AppCompatActivity() {
             }
             .addOnFailureListener { exception ->
             }
+
     }
     override fun onBackPressed() {
         var pref = getSharedPreferences("pref",Context.MODE_PRIVATE)   //앱종료되도 값 유지

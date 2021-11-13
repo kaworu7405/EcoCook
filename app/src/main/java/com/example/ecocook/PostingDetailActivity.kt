@@ -1,5 +1,6 @@
 package com.example.ecocook
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
@@ -187,10 +188,13 @@ class PostingDetailActivity : AppCompatActivity() {
 
     fun getFireBaseProfileImage(uid: String) { //profile 사진을 ImageView에 설정해주는 함수
         var fileName = "profile_" + uid + ".jpg"
-
+        if(this.isFinishing){
+            return
+        }
+        val glide=Glide.with(this)
         val storageRef = Firebase.storage.reference.child("profile_img/" + fileName)
         storageRef.downloadUrl.addOnSuccessListener { uri ->
-            Glide.with(this).load(uri).into(userImageView)
+            glide.load(uri).into(userImageView)
         }.addOnFailureListener {
             // Handle any errors
         }
@@ -198,10 +202,13 @@ class PostingDetailActivity : AppCompatActivity() {
 
     fun getFireBaseFoodImage(id: String) {
         var fileName = "posting_" + id + ".jpg"
-
+        if(this.isFinishing){
+            return
+        }
+        val glide=Glide.with(this)
         val storageRef = Firebase.storage.reference.child("posting_img/" + fileName)
         storageRef.downloadUrl.addOnSuccessListener { uri ->
-            Glide.with(this).load(uri).into(postingFoodImg)
+            glide.load(uri).into(postingFoodImg)
         }.addOnFailureListener {
             // Handle any errors
         }

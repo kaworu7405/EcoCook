@@ -167,9 +167,13 @@ class ChangeProfileActivity: AppCompatActivity() {
 
     fun getFireBaseProfileImage(){ //profile 사진을 ImageView에 설정해주는 함수
         var fileName="profile_img/profile_"+user!!.uid.toString()+".jpg"
+        if(this.isFinishing){
+            return
+        }
+        val glide=Glide.with(this)
         var storageRef=Firebase.storage.reference
         storageRef.child(fileName).downloadUrl.addOnSuccessListener { uri->
-            Glide.with(this).load(uri).into(UserImageView)
+            glide.load(uri).into(UserImageView)
         }.addOnFailureListener {
             // Handle any errors
         }
